@@ -1,0 +1,25 @@
+﻿<FluentDataGrid Items="@Games" Virtualize="true" ItemSize="@PageSize" ItemsProvider="FetchGames">
+    <ChildContent>
+        <PropertyColumn Property="@(p => p.Description)"
+                        Sortable="true"
+                        Filtered="true"
+                        Title="Title"/>
+        <PropertyColumn Property="@(p => p.Platform.Description)"
+                        Sortable="true"
+                        Filtered="!string.IsNullOrWhiteSpace(PlatformFilter)"
+                        Tooltip="true"
+                        Title="Platform">
+            <ColumnOptions>
+                <div class="search-box">
+                    <FluentSearch
+                        Autofocus="true"
+                        Placeholder="Search platform"
+                        @bind-Value="PlatformFilter"
+                        @oninput="HandlePlatformFilter"
+                        @bind-Value:after="HandleClear"/>
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.Copies)"/>
+    </ChildContent>
+</FluentDataGrid>

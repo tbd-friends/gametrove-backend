@@ -1,0 +1,6 @@
+
+lcsharpsquid:S1118"OAdd a 'protected' constructor or the 'static' keyword to the class declaration.(ÒÁÊÎ
+tcsharpsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(Ó÷æ¼úÿÿÿÿ
+ncsharpsquid:S6608"QIndexing at 0 should be used instead of the "Enumerable" extension method "First"(ŸÆÌ»
+scsharpsquid:S6608$"QIndexing at 0 should be used instead of the "Enumerable" extension method "First"(µ¹‹Ýüÿÿÿÿ
+xcsharpsquid:S6608'"VIndexing at Count-1 should be used instead of the "Enumerable" extension method "Last"(ÏÄä¾øÿÿÿÿ

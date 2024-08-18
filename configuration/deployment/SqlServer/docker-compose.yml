@@ -1,0 +1,18 @@
+version: "3.4"
+
+services:
+  gtsqlserver:
+    container_name: "gametrove-sql-server"
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    volumes:
+      - ${DATA_DIRECTORY}/data/mssql/data:/var/opt/mssql/data:rw
+      - ${DATA_DIRECTORY}/data/mssql/logs:/var/opt/mssql/logs:ro
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=b9fn1dj3!dX4lp
+
+networks:
+  application:
+    name: 'gametrove-application-network'

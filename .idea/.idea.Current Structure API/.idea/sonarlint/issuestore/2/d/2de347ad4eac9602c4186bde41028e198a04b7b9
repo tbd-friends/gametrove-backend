@@ -1,0 +1,10 @@
+
+csharpsquid:S3459H"7Remove unassigned auto-property 'Id', or set its value.(†×øùÿÿÿÿJ$433ed048-6b21-41ef-a55a-b8c4f4420c83
+pcsharpsquid:S1144S"(Remove the unused private property 'Id'.(†×øùÿÿÿÿJ$aec90bfc-4b96-4eb8-a8ba-a1f0f2fe45c3
+wcsharpsquid:S1144Y"(Remove the unused private property 'Id'.(†×øùÿÿÿÿ8¾¸¥¹ò1J$06351db9-f35d-4ff7-96dd-120733716ab5
+wcsharpsquid:S1144_"(Remove the unused private property 'Id'.(†×øùÿÿÿÿ8¾¸¥¹ò1J$86bb69d5-c404-4e92-93f2-abb66b3b513c
+‡csharpsquid:S1144H"8Remove the unused private set accessor in property 'Id'.(†×øùÿÿÿÿ8ñ‰ºò1J$422cd395-acf8-46fa-8a10-76d476e93204
+csharpsquid:S3260F"[Private classes which are not derived in the current assembly should be marked as 'sealed'.(š¶áuJ$48991a4f-a710-4f90-8d71-4a862cc3754a
+ªcsharpsquid:S3260Q"[Private classes which are not derived in the current assembly should be marked as 'sealed'.(˜ÓĞõøÿÿÿÿ8¿¸¥¹ò1J$0d20f9dd-c3f6-44b9-a447-56da5d0856a9
+ªcsharpsquid:S3260W"[Private classes which are not derived in the current assembly should be marked as 'sealed'.(úûô€úÿÿÿÿ8¿¸¥¹ò1J$dda19869-3236-4729-b864-f056f6276720
+ªcsharpsquid:S3260]"[Private classes which are not derived in the current assembly should be marked as 'sealed'.(Ø•µËûÿÿÿÿ8ñ‰ºò1J$1e5c1dcb-b573-43f7-9742-88512e48f230

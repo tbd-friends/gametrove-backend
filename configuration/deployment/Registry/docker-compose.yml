@@ -1,0 +1,7 @@
+services:
+    gtregistry:
+       image: registry:latest
+       container_name: "gt-docker-registry"
+       restart: always
+       ports:
+          - 5001:5000
