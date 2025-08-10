@@ -1,21 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>igdb_api</RootNamespace>
         <UserSecretsId>1bc2f4e7-b3d8-4d01-bed7-7e33719bb4ca</UserSecretsId>
+        <AssemblyName>IGDB Api</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ardalis.ApiEndpoints" Version="4.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+        <PackageReference Include="Ardalis.ApiEndpoints" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\configuration\aspire\aspire-service-defaults\aspire-service-defaults.csproj" />
+      <ProjectReference Include="..\authentication\authentication.csproj" />
     </ItemGroup>
 
 

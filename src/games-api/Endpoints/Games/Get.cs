@@ -1,28 +1,27 @@
-﻿using Ardalis.ApiEndpoints;
-using Games.Infrastructure.Database;
-using Games.Infrastructure.ResultModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using FastEndpoints;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using TbdDevelop.GameTrove.GameApi.Infrastructure.Database;
+using TbdDevelop.GameTrove.GameApi.Infrastructure.ResultModels;
 
-namespace Games.Endpoints.Games;
+namespace TbdDevelop.GameTrove.GameApi.Endpoints.Games;
 
-public class Get
-    : EndpointBaseAsync
-        .WithRequest<Get.Query>
-        .WithResult<GameDetailResultModel?>
+public class Get(IDbContextFactory<GameTrackingContext> factory)
+    : Endpoint<Get.Query, Results<Ok<GameDetailResultModel>, NoContent>>
 {
-    private readonly IDbContextFactory<GameTrackingContext> _factory;
-
-    public Get(IDbContextFactory<GameTrackingContext> factory)
+    public override void Configure()
     {
-        _factory = factory;
+        Get("games/{identifier}");
+        
+        Policies("AuthPolicy");
     }
 
-    [HttpGet("[namespace]/{identifier}")]
-    public override async Task<GameDetailResultModel?> HandleAsync([FromRoute] Query request,
-        CancellationToken cancellationToken = new())
+    public override async Task<Results<Ok<GameDetailResultModel>, NoContent>> ExecuteAsync(Query request,
+        CancellationToken ct)
     {
-        await using var context = await _factory.CreateDbContextAsync(cancellationToken);
+        await using var context = await factory.CreateDbContextAsync(ct);
+
+        var currentContext = context;
 
         var game = from g in context.Games
             join p in context.Platforms on g.PlatformId equals p.Id
@@ -45,12 +44,12 @@ public class Get
                         Description = pb.Name
                     }
                     : null,
-                Copies = (from cp in context.GameCopies
-                    join pc in context.PriceChartingGameCopyAssociations on cp.Id equals pc.GameCopyId into pcx
+                Copies = (from cp in currentContext.GameCopies
+                    join pc in currentContext.PriceChartingGameCopyAssociations on cp.Id equals pc.GameCopyId into pcx
                     from pc in pcx.DefaultIfEmpty()
-                    let isNew = (cp.Condition & 256) == 256
-                    let isCompleteInBox = ((cp.Condition & 32) == 32) && ((cp.Condition & 256) == 0)
-                    let isLoose = ((cp.Condition & 128) == 128) && ((cp.Condition & 32) == 0)
+                    let isNew = cp.IsNew
+                    let isCompleteInBox = cp.IsCompleteInBox
+                    let isLoose = cp.IsLoose
                     orderby cp.Cost, cp.PurchaseDate descending
                     where cp.GameId == g.Id
                     select new GameCopyResultModel
@@ -73,9 +72,9 @@ public class Get
                     }).ToList()
             };
 
-        var result = await game.FirstOrDefaultAsync(cancellationToken);
+        var result = await game.FirstOrDefaultAsync(ct);
 
-        return result;
+        return result != null ? TypedResults.Ok(result) : TypedResults.NoContent();
     }
 
     public sealed record Query

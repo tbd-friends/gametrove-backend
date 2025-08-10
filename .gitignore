@@ -490,4 +490,43 @@ FodyWeavers.xsd
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
+### Additional IDE exclusions ###
+# JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Eclipse
+.metadata/
+.project
+.classpath
+.settings/
+*.prefs
+
+# NetBeans
+nbproject/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
 # End of https://www.toptal.com/developers/gitignore/api/rider,visualstudio,dotnetcore

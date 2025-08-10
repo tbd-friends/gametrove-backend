@@ -1,3 +1,4 @@
+using Authentication.Extensions;
 using igdb_api.Clients;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
@@ -12,6 +13,8 @@ builder.Services.AddControllers(options => { options.UseNamespaceRouteToken(); }
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
+
+builder.Services.AddAuth0Authentication(builder.Configuration);
 
 builder.Services.AddHttpClient<IGDBAuthClient>("igdb-auth");
 builder.Services.AddHttpClient<IGDBApiClient>("igdb",
@@ -28,6 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

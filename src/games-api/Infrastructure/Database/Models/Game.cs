@@ -1,4 +1,4 @@
-﻿namespace Games.Infrastructure.Database.Models;
+﻿namespace TbdDevelop.GameTrove.GameApi.Infrastructure.Database.Models;
 
 public class Game
 {

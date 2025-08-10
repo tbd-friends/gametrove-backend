@@ -1,0 +1,5 @@
+include: 
+  - path: ./SqlServer/docker-compose.yml
+    env_file:
+      - ./services.env
+  

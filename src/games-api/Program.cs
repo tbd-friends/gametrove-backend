@@ -1,23 +1,47 @@
-using Games.Infrastructure.Database;
+using Authentication.Extensions;
+using FastEndpoints;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using TbdDevelop.GameTrove.GameApi.Infrastructure.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add services to the container.
-
-builder.Services.AddControllers(config => config.UseNamespaceRouteToken());
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddPooledDbContextFactory<GameTrackingContext>(configure =>
+builder.Services.AddFastEndpoints();
+
+builder.Services.AddMemoryCache();
+
+builder.Services.AddPooledDbContextFactory<GameTrackingContext>((provider, configure) =>
 {
+    var cache = provider.GetRequiredService<IMemoryCache>();
+
     configure.UseSqlServer(builder.Configuration.GetConnectionString("gametracking-work"))
-        //.UseMemoryCache()
+        .UseMemoryCache(cache)
         .LogTo(Console.WriteLine);
+});
+
+builder.Services.AddAuth0Authentication(builder.Configuration);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AuthPolicy", policy =>
+        policy.RequireAuthenticatedUser());
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
@@ -29,10 +53,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseFastEndpoints();
 
-app.Run();
+await app.RunAsync();

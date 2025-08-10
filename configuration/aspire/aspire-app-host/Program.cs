@@ -11,9 +11,4 @@ var apiGateway = builder.AddProject<Projects.api_gateway>("api-gateway")
     .WithReference(igdbApi)
     .WithOtlpExporter();
 
-builder.AddProject<Projects.client_app>("client-app")
-    .WithReference(apiGateway)
-    .WithExternalHttpEndpoints()
-    .WithOtlpExporter();
-
-builder.Build().Run();
+await builder.Build().RunAsync();

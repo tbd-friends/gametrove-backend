@@ -127,29 +127,26 @@ public class EntityFields
         {
             return new[] { propertyName };
         }
+
+        if (!property.PropertyType.IsGenericType)
+        {
+            if (referenceProperty is null) return null;
+
+            var fields = GetFieldsFrom(referenceProperty.Type);
+
+            return from f in fields select $"{propertyName}.{f}";
+        }
         else
         {
-            if (!property.PropertyType.IsGenericType)
+            if (property.PropertyType.GenericTypeArguments.SingleOrDefault(s => s.IsClass) == null)
             {
-                if (referenceProperty is null) return null;
-
-                var fields = GetFieldsFrom(referenceProperty.Type);
-
-                return (from f in fields select $"{propertyName}.{f}");
+                return [propertyName];
             }
-            else
-            {
-                if (property.PropertyType.GenericTypeArguments.SingleOrDefault(s => s.IsClass) != null)
-                {
-                    var fields = GetFieldsFrom(property.PropertyType.GenericTypeArguments[0]);
+                
+            var fields = GetFieldsFrom(property.PropertyType.GenericTypeArguments[0]);
 
-                    return (from f in fields select $"{propertyName}.{f}");
-                }
-                else
-                {
-                    return new[] { propertyName };
-                }
-            }
+            return (from f in fields select $"{propertyName}.{f}");
+
         }
     }
 }

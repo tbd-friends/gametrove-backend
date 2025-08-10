@@ -1,4 +1,4 @@
-﻿namespace Games.Infrastructure.ResultModels;
+﻿namespace TbdDevelop.GameTrove.GameApi.Infrastructure.ResultModels;
 
 public class GameListResultModel : ResultModelBase
 {

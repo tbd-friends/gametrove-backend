@@ -1,23 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>games-client</RootNamespace>
+        <RootNamespace>TbdDevelop.GameTrove.GameApi</RootNamespace>
+        <AssemblyName>GameTrove Api</AssemblyName>
+        <UserSecretsId>8c67511a-114e-4083-8b16-19e189190261</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ardalis.ApiEndpoints" Version="4.1.0"/>
-        <PackageReference Include="Ardalis.ApiEndpoints.Swashbuckle" Version="4.1.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.0" />
+        <PackageReference Include="FastEndpoints" />
+        <PackageReference Include="FastEndpoints.OpenTelemetry" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+        <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\configuration\aspire\aspire-service-defaults\aspire-service-defaults.csproj" />
+      <ProjectReference Include="..\authentication\authentication.csproj" />
     </ItemGroup>
 
 

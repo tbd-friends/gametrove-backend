@@ -1,4 +1,4 @@
-﻿namespace Games.Infrastructure;
+﻿namespace TbdDevelop.GameTrove.GameApi.Infrastructure;
 
 public class ResultSet<TEntity>
 {

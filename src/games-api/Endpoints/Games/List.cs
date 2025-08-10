@@ -1,21 +1,28 @@
-﻿using Ardalis.ApiEndpoints;
-using Games.Infrastructure;
-using Games.Infrastructure.Database;
-using Games.Infrastructure.ResultModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using FastEndpoints;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using TbdDevelop.GameTrove.GameApi.Infrastructure;
+using TbdDevelop.GameTrove.GameApi.Infrastructure.Database;
+using TbdDevelop.GameTrove.GameApi.Infrastructure.ResultModels;
 
-namespace Games.Endpoints.Games;
+namespace TbdDevelop.GameTrove.GameApi.Endpoints.Games;
 
-public class List(IDbContextFactory<GameTrackingContext> factory) : EndpointBaseAsync
-    .WithRequest<List.Query>
-    .WithResult<ResultSet<GameListResultModel>>
+public class List(IDbContextFactory<GameTrackingContext> factory)
+    : Endpoint<List.Query,
+        Ok<ResultSet<GameListResultModel>>>
 {
-    [HttpGet("[namespace]")]
-    public override async Task<ResultSet<GameListResultModel>> HandleAsync([FromQuery] Query request,
-        CancellationToken cancellationToken = new())
+    public override void Configure()
     {
-        await using var context = await factory.CreateDbContextAsync(cancellationToken);
+        Get("games");
+
+        Policies("AuthPolicy");
+    }
+
+    public override async Task<Ok<ResultSet<GameListResultModel>>> ExecuteAsync(
+        Query request,
+        CancellationToken ct)
+    {
+        await using var context = await factory.CreateDbContextAsync(ct);
 
         var games = from g in context.Games
             join p in context.Platforms on g.PlatformId equals p.Id
@@ -71,13 +78,14 @@ public class List(IDbContextFactory<GameTrackingContext> factory) : EndpointBase
                 .Skip(request.Start)
                 .Take(request.PageSize);
 
-        return new ResultSet<GameListResultModel>
+
+        return TypedResults.Ok(new ResultSet<GameListResultModel>
         {
             Results = results.ToList(),
             Total = games.Count(),
             PageSize = request.PageSize,
             Starting = request.Start
-        };
+        });
     }
 
     public sealed record Query
