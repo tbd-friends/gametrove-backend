@@ -18,8 +18,8 @@
     </envs>
     <option name="USE_PODMAN_RUNTIME" value="0" />
     <option name="TRACK_URL" value="1" />
-    <option name="TRACK_BROWSER_LAUNCH" value="1" />
-    <browser url="https://localhost:17158" start="true" />
+    <option name="TRACK_BROWSER_LAUNCH" value="0" />
+    <browser url="https://localhost:17158" />
     <method v="2">
       <option name="Build" />
     </method>

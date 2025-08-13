@@ -1,97 +1,81 @@
 ﻿using FastEndpoints;
+using games_application.Query.Games;
+using Mediator;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
 using TbdDevelop.GameTrove.GameApi.Infrastructure;
-using TbdDevelop.GameTrove.GameApi.Infrastructure.Database;
 using TbdDevelop.GameTrove.GameApi.Infrastructure.ResultModels;
 
 namespace TbdDevelop.GameTrove.GameApi.Endpoints.Games;
 
-public class List(IDbContextFactory<GameTrackingContext> factory)
+public class List(ISender sender)
     : Endpoint<List.Query,
-        Ok<ResultSet<GameListResultModel>>>
+        Results<Ok<ResultSet<GameListResponseModel>>, NotFound>>
 {
     public override void Configure()
     {
         Get("games");
-
+        
         Policies("AuthPolicy");
+        
+        Summary(s =>
+        {
+            s.Summary = "Get paginated list of games";
+            s.Params["page"] = "Page number (default: 0)";
+            s.Params["limit"] = "Page size (default: 30)";
+            s.Params["search"] = "Search term for filtering games";
+        });
     }
 
-    public override async Task<Ok<ResultSet<GameListResultModel>>> ExecuteAsync(
+    public override async Task<Results<Ok<ResultSet<GameListResponseModel>>, NotFound>> ExecuteAsync(
         Query request,
         CancellationToken ct)
     {
-        await using var context = await factory.CreateDbContextAsync(ct);
+        var result = await sender.Send(new FetchAllGames.Query(
+            request.Page,
+            request.Limit,
+            request.Search
+        ), ct);
 
-        var games = from g in context.Games
-            join p in context.Platforms on g.PlatformId equals p.Id
-            join pb in context.Publishers on g.PublisherId equals pb.Id into pbx
-            from pb in pbx.DefaultIfEmpty()
-            select new
-            {
-                g,
-                p,
-                pb
-            };
-
-        if (request.Search is not null)
+        if (!result.IsSuccess)
         {
-            games = from x in games
-                where x.g.Name.Contains(request.Search) ||
-                      (from gc in context.GameCopies
-                          where gc.GameId == x.g.Id
-                                && gc.Upc.Contains(request.Search)
-                          select gc
-                      ).Any()
-                select x;
+            return TypedResults.NotFound();
         }
 
-        var transform = from x in games
-            let g = x.g
-            let p = x.p
-            let pb = x.pb
-            orderby p.Name, g.Name
-            select new GameListResultModel
-            {
-                Id = g.Identifier,
-                Description = g.Name,
-                Platform = new PlatformResultModel
-                {
-                    Id = p.Identifier,
-                    Description = p.Name
-                },
-                Publisher = pb != null
-                    ? new PublisherResultModel
-                    {
-                        Id = pb.Identifier,
-                        Description = pb.Name
-                    }
-                    : null,
-                Copies = (from cp in context.GameCopies
-                    where cp.GameId == g.Id
-                    select cp.Id).Count()
-            };
-
-        var results =
-            transform
-                .Skip(request.Start)
-                .Take(request.PageSize);
-
-
-        return TypedResults.Ok(new ResultSet<GameListResultModel>
+        return TypedResults.Ok(new ResultSet<GameListResponseModel>
         {
-            Results = results.ToList(),
-            Total = games.Count(),
-            PageSize = request.PageSize,
-            Starting = request.Start
+            Data = from g in result.Value.Data
+                select new GameListResponseModel
+                {
+                    Id = g.Identifier,
+                    Description = g.Name,
+                    Platform = new PlatformResponseModel
+                    {
+                        Id = g.Platform.Identifier,
+                        Description = g.Platform.Name,
+                    },
+                    Publisher = g.Publisher != null
+                        ? new PublisherResponseModel
+                        {
+                            Id = g.Publisher.Identifier,
+                            Description = g.Publisher.Name,
+                        }
+                        : null,
+                    CopyCount = g.CopyCount
+                },
+            Meta = new ResultSet<GameListResponseModel>.MetaData
+            {
+                Total = result.Value.TotalResults,
+                Limit = result.Value.Limit,
+                Page = result.Value.Page,
+                HasMore = result.Value.HasMore
+            }
         });
     }
 
     public sealed record Query
     {
-        public int Start { get; set; }
-        public int PageSize { get; set; } = 30;
+        public int Page { get; set; }
+        public int Limit { get; set; } = 30;
         public string? Search { get; set; }
     }
 }

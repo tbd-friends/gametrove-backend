@@ -2,8 +2,15 @@
 
 public class ResultSet<TEntity>
 {
-    public IEnumerable<TEntity> Results { get; set; } = null!;
-    public int Starting { get; set; } = 0;
-    public int PageSize { get; set; }
-    public int Total { get; set; }
+    public IEnumerable<TEntity> Data { get; set; } = null!;
+    public MetaData? Meta { get; set; }
+
+    public class MetaData
+    {
+        public int Page { get; set; }
+        public int Limit { get; set; }
+        public int Total { get; set; }
+        public int TotalPages => Total / Limit;
+        public bool HasMore { get; set; }
+    }
 }

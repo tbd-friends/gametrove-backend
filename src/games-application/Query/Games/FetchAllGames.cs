@@ -1,0 +1,43 @@
+﻿using Ardalis.Result;
+using games_application.Query.Games.Models;
+using games_application.Query.Games.Specifications;
+using Mediator;
+using shared_kernel;
+using TbdDevelop.GameTrove.Games.Domain.Entities;
+
+namespace games_application.Query.Games;
+
+public class FetchAllGames
+{
+    public record Query(
+        int Start,
+        int Limit,
+        string? Search) : IQuery<Result<PagedResultSetDto<GameDto>>>;
+
+    public class Handler(IRepository<Game> repository) : IQueryHandler<Query, Result<PagedResultSetDto<GameDto>>>
+    {
+        public async ValueTask<Result<PagedResultSetDto<GameDto>>> Handle(Query query,
+            CancellationToken cancellationToken)
+        {
+            var matchingGamesCount =
+                await repository.CountAsync(new GamesMatchingTermSpec(query.Search),
+                    cancellationToken);
+
+            if (matchingGamesCount == 0)
+            {
+                return Result.NotFound();
+            }
+
+            var games = await repository.ListAsync(
+                new PagedGamesWithDetailSpec(query.Search, query.Start, query.Limit), cancellationToken);
+
+            return Result.Success(new PagedResultSetDto<GameDto>
+            {
+                Data = games,
+                Limit = query.Limit,
+                Page = query.Start,
+                TotalResults = matchingGamesCount
+            });
+        }
+    }
+}

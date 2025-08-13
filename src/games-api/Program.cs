@@ -1,37 +1,25 @@
 using Authentication.Extensions;
 using FastEndpoints;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using TbdDevelop.GameTrove.GameApi.Infrastructure.Database;
+using games_application;
+using TbdDevelop.GameTrove.Games.Infrastructure;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication
+    .CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddInfrastructure();
+builder.AddApplication();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddFastEndpoints();
 
-builder.Services.AddMemoryCache();
-
-builder.Services.AddPooledDbContextFactory<GameTrackingContext>((provider, configure) =>
-{
-    var cache = provider.GetRequiredService<IMemoryCache>();
-
-    configure.UseSqlServer(builder.Configuration.GetConnectionString("gametracking-work"))
-        .UseMemoryCache(cache)
-        .LogTo(Console.WriteLine);
-});
-
 builder.Services.AddAuth0Authentication(builder.Configuration);
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AuthPolicy", policy =>
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AuthPolicy", policy =>
         policy.RequireAuthenticatedUser());
-});
 
 builder.Services.AddCors(options =>
 {
@@ -54,8 +42,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -22,6 +22,12 @@
     <ItemGroup>
       <ProjectReference Include="..\..\configuration\aspire\aspire-service-defaults\aspire-service-defaults.csproj" />
       <ProjectReference Include="..\authentication\authentication.csproj" />
+      <ProjectReference Include="..\games-application\games-application.csproj" />
+      <ProjectReference Include="..\games.infrastructure\games.infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Infrastructure\Database\Models\" />
     </ItemGroup>
 
 
