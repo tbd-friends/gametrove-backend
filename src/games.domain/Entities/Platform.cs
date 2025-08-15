@@ -6,4 +6,5 @@ public class Platform
     public string Name { get; set; } = null!;
     public string? Manufacturer { get; set; }
     public Guid Identifier { get; set; }
+    public virtual IgdbPlatformMapping? Mapping { get; set; }
 }

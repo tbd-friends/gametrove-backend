@@ -5,4 +5,5 @@ public class PlatformResult
     public Guid Identifier { get; set; }
     public required string Name { get; set; }
     public string? Manufacturer { get; set; }
+    public int IgdbPlatformId { get; set; }
 }

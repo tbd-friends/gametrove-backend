@@ -1,5 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using igdb_api.Clients;
+using igdb_api.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Endpoint = igdb_api.Clients.Endpoint;
 
@@ -53,35 +54,6 @@ public class Search(IGDBApiClient client) : EndpointBaseAsync
                         })
                     : null
             }).ToList());
-    }
-
-    private class GameSummary
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-
-        public string Summary { get; set; } = null!;
-        public IEnumerable<PlatformSummary> Platforms { get; set; } = null!;
-        public IEnumerable<GenreSummary> Genres { get; set; } = null!;
-        public IEnumerable<ThemeSummary> Themes { get; set; } = null!;
-    }
-
-    private class PlatformSummary
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-    }
-
-    private class GenreSummary
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-    }
-
-    private class ThemeSummary
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
     }
 
     public class Parameters

@@ -9,5 +9,10 @@ public class PlatformConfiguration : IEntityTypeConfiguration<Platform>
     public void Configure(EntityTypeBuilder<Platform> builder)
     {
         builder.ToTable("Platforms");
+
+        builder.HasOne(p => p.Mapping)
+            .WithOne(m => m.Platform)
+            .HasForeignKey<IgdbPlatformMapping>(p => p.PlatformId)
+            .HasPrincipalKey<Platform>(p => p.Id);
     }
 }

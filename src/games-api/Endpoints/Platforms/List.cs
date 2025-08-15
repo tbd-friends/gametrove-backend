@@ -1,5 +1,4 @@
-﻿using Ardalis.Result;
-using FastEndpoints;
+﻿using FastEndpoints;
 using games_application.Query.Platforms;
 using Mediator;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -33,7 +32,12 @@ public class List(ISender sender)
         ), ct);
 
         return TypedResults.Ok(result.Value.Select(r => new PlatformResponseModel
-            { Id = r.Identifier, Description = r.Name, Manufacturer = r.Manufacturer }));
+        {
+            Id = r.Identifier,
+            Description = r.Name,
+            Manufacturer = r.Manufacturer,
+            IgdbPlatformId = r.IgdbPlatformId
+        }));
     }
 
 
