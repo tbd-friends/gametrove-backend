@@ -33,7 +33,8 @@ public class EntityFields
                 {
                     case "Contains":
                     {
-                        var values = Expression.Lambda(((methodCall.Arguments.First() as MemberExpression)!))
+                        var values = Expression
+                            .Lambda((methodCall.Arguments.First() as MemberExpression)!)
                             .Compile().DynamicInvoke();
 
                         var name = (methodCall.Arguments.Last() as MemberExpression)?.Member.Name;
@@ -50,6 +51,8 @@ public class EntityFields
                         {
                             return $"{lhs}=({string.Join(',', numerics)})";
                         }
+
+                        return $"{lhs}=*\"{values}\"*";
                     }
                         break;
                 }

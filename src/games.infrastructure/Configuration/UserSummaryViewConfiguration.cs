@@ -9,5 +9,7 @@ public class UserSummaryViewConfiguration : IEntityTypeConfiguration<UserSummary
     public void Configure(EntityTypeBuilder<UserSummary> builder)
     {
         builder.ToView("UserSummary");
+
+        builder.HasNoKey();
     }
 }

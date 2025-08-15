@@ -5,37 +5,25 @@ using Endpoint = igdb_api.Clients.Endpoint;
 
 namespace igdb_api.Endpoints.Game;
 
-public class Search : EndpointBaseAsync
+[Route("search")]
+public class Search(IGDBApiClient client) : EndpointBaseAsync
     .WithRequest<Search.Parameters>
     .WithActionResult<IEnumerable<Search.Result>>
 {
-    private readonly IGDBApiClient _client;
-
-    public Search(IGDBApiClient client)
-    {
-        _client = client;
-    }
-
-    [HttpGet("[namespace]")]
+    [HttpGet]
     public override async Task<ActionResult<IEnumerable<Result>>> HandleAsync([FromQuery] Parameters parameters,
         CancellationToken cancellationToken = new())
     {
-        var matching = await _client.Query(
+        var matching = await client.Query(
             new IGDBQuery<GameSummary>
             {
                 Endpoint = Endpoint.Games,
-                Query = IgdbLanguage.Search(parameters.Term)
+                Search = IgdbLanguage.Search($"{parameters.Term}"),
+                Where = IgdbLanguage.Where($"platforms.name=*\"{parameters.Platform}\"*"),
+                Limit = IgdbLanguage.Limit(15)
             }, cancellationToken);
 
         if (matching is null) return NotFound();
-
-        if (!string.IsNullOrEmpty(parameters.Platform))
-        {
-            matching = from r in matching
-                where r.Platforms != null && r.Platforms.Any(p =>
-                    p.Name.Contains(parameters.Platform, StringComparison.CurrentCultureIgnoreCase))
-                select r;
-        }
 
         return Ok((from r in matching
             select new Result

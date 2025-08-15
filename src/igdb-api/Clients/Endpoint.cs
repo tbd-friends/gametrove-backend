@@ -2,11 +2,12 @@
 
 public class Endpoint
 {
-    public static Endpoint AlternativeNames = new Endpoint("alternative_names");
-    public static Endpoint Covers = new Endpoint("covers");
-    public static Endpoint Games = new Endpoint("games");
-    public static Endpoint Genres = new Endpoint("genres");
-    public static Endpoint Platforms = new Endpoint("platforms");
+    public static Endpoint AlternativeNames = new("alternative_names");
+    public static Endpoint Covers = new("covers");
+    public static Endpoint Games = new("games");
+    public static Endpoint Genres = new("genres");
+    public static Endpoint Platforms = new("platforms");
+    public static Endpoint Search = new("search");
 
     private readonly string _slug;
 

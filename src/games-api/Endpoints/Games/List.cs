@@ -1,5 +1,7 @@
-﻿using FastEndpoints;
+﻿using Ardalis.Result;
+using FastEndpoints;
 using games_application.Query.Games;
+using games_application.Query.Games.Models;
 using Mediator;
 using Microsoft.AspNetCore.Http.HttpResults;
 using TbdDevelop.GameTrove.GameApi.Infrastructure;
@@ -14,9 +16,9 @@ public class List(ISender sender)
     public override void Configure()
     {
         Get("games");
-        
+
         Policies("AuthPolicy");
-        
+
         Summary(s =>
         {
             s.Summary = "Get paginated list of games";
@@ -36,40 +38,52 @@ public class List(ISender sender)
             request.Search
         ), ct);
 
-        if (!result.IsSuccess)
-        {
-            return TypedResults.NotFound();
-        }
+        return TypedResults.Ok(BuildResultFromQuery(result));
+    }
 
-        return TypedResults.Ok(new ResultSet<GameListResponseModel>
-        {
-            Data = from g in result.Value.Data
-                select new GameListResponseModel
-                {
-                    Id = g.Identifier,
-                    Description = g.Name,
-                    Platform = new PlatformResponseModel
-                    {
-                        Id = g.Platform.Identifier,
-                        Description = g.Platform.Name,
-                    },
-                    Publisher = g.Publisher != null
-                        ? new PublisherResponseModel
-                        {
-                            Id = g.Publisher.Identifier,
-                            Description = g.Publisher.Name,
-                        }
-                        : null,
-                    CopyCount = g.CopyCount
-                },
-            Meta = new ResultSet<GameListResponseModel>.MetaData
+    private static ResultSet<GameListResponseModel> BuildResultFromQuery(Result<PagedResultSetDto<GameDto>> result)
+    {
+        return result.IsSuccess
+            ? new ResultSet<GameListResponseModel>
             {
-                Total = result.Value.TotalResults,
-                Limit = result.Value.Limit,
-                Page = result.Value.Page,
-                HasMore = result.Value.HasMore
+                Data = from g in result.Value.Data
+                    select new GameListResponseModel
+                    {
+                        Id = g.Identifier,
+                        Description = g.Name,
+                        Platform = WithPlatform(g),
+                        Publisher = WithPublisher(g),
+                        CopyCount = g.CopyCount
+                    },
+                Meta = new ResultSet<GameListResponseModel>.MetaData
+                {
+                    Total = result.Value.TotalResults,
+                    Limit = result.Value.Limit,
+                    Page = result.Value.Page,
+                    HasMore = result.Value.HasMore
+                }
             }
-        });
+            : new ResultSet<GameListResponseModel>() { Data = [] };
+    }
+
+    private static PlatformResponseModel WithPlatform(GameDto g)
+    {
+        return new PlatformResponseModel
+        {
+            Id = g.Platform.Identifier,
+            Description = g.Platform.Name,
+        };
+    }
+
+    private static PublisherResponseModel? WithPublisher(GameDto g)
+    {
+        return g.Publisher != null
+            ? new PublisherResponseModel
+            {
+                Id = g.Publisher.Identifier,
+                Description = g.Publisher.Name,
+            }
+            : null;
     }
 
     public sealed record Query
