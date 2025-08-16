@@ -3,12 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "igdb-api", "src\igdb-api\igdb-api.csproj", "{F5D34B0B-685C-4B41-BF4B-9CB6A454B258}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{837D9A05-F6D4-479F-95B9-76AC43061B64}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\security-scan.ps1 = scripts\security-scan.ps1
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{83A849F2-8CDB-4A55-A3D1-5B98227665A7}"
 	ProjectSection(SolutionItems) = preProject
 		configuration\deployment\docker-compose.yml = configuration\deployment\docker-compose.yml
 		configuration\deployment\SqlServer\docker-compose.yml = configuration\deployment\SqlServer\docker-compose.yml
-		configuration\deployment\services.env = configuration\deployment\services.env
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aspire-app-host", "configuration\aspire\aspire-app-host\aspire-app-host.csproj", "{78E9B93A-1701-4823-881C-0C59BE2F3565}"

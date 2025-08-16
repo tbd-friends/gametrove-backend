@@ -167,3 +167,83 @@ public async Task<IActionResult> SecureEndpoint()
 - Maintain OpenTelemetry instrumentation for new endpoints
 - Use `[Authorize]` attribute and authentication extensions for securing endpoints
 - *IMPORTANT* *DO NOT IGNORE* Do not attempt to build the project. Prompt me at the end of a instructions to build if that is the next required step
+
+---
+## Security Checklist (Pre-Public & Pre-PR Standard Action)
+
+When preparing any branch for a public push or opening a PR, perform ALL of the following steps. Automate where possible. If any check fails, remediate before proceeding.
+
+### 1. Secret Hygiene
+- [ ] Run secret scan: `gitleaks detect -v --config=.gitleaks.toml` (or GitHub Advanced Security if enabled)
+- [ ] Ensure no real secrets in: `appsettings*.json`, `*.cs` constants, `docker-compose.yml`, `*.env`
+- [ ] Confirm `services.env` is NOT committed (rename to `services.env.example` for samples)
+- [ ] Replace any sample credentials with placeholders (e.g. `<CHANGE_ME>`)
+- [ ] Rotate any previously exposed secrets and document rotation in SECURITY.md (internal process note)
+
+### 2. Dependency & Supply Chain
+- [ ] List vulnerable packages: `dotnet list package --vulnerable --include-transitive`
+- [ ] Upgrade or suppress with justification (NEVER ignore Critical/High)
+- [ ] Validate central versions in `Directory.Packages.props` (no unpinned floating versions)
+- [ ] Check for unexpected added package sources (NuGet.config if present)
+
+### 3. Static Analysis & Build Integrity
+- [ ] Enable Treat Warnings as Errors locally when adding analyzers
+- [ ] (Planned) Integrate Roslyn security analyzers (e.g. `Microsoft.CodeAnalysis.NetAnalyzers` w/ security rules enabled)
+- [ ] (Planned) Add `dotnet format --verify-no-changes` in CI to prevent style drift (reduces review surface & hidden injections)
+
+### 4. Configuration & Infrastructure
+- [ ] Inspect `docker-compose.yml` files: no privileged containers, pinned image tags (avoid `latest` for production)
+- [ ] Verify SQL Server password not hard-coded anywhere except local `.env`
+- [ ] Ensure CORS wildcards are limited or documented as DEV ONLY
+- [ ] Confirm no debug/trace sensitive logging in production (e.g. EF `LogTo` may leak SQL)
+
+### 5. Authentication & Authorization
+- [ ] Auth0 settings only via secrets manager or environment (NOT committed)
+- [ ] Verify policies (`AuthPolicy`) enforce auth for non-public endpoints
+- [ ] Plan granular scopes for new endpoints (document required scopes)
+
+### 6. Data Protection & Privacy
+- [ ] No PII stored outside intended tables
+- [ ] Connection strings use encryption flags where applicable (future: Azure SQL / Always Encrypted options)
+
+### 7. Telemetry & Logging
+- [ ] Ensure OpenTelemetry exporter endpoints not leaking credentials
+- [ ] Remove/guard any verbose logging of tokens or user claims
+
+### 8. Documentation Updates
+- [ ] Update README if new security-relevant setup changes occurred
+- [ ] Update SECURITY.md if new disclosure or handling process is defined
+
+### 9. CI/CD (Planned Enhancements)
+- [ ] Add GitHub Actions workflow: build, vuln scan, gitleaks, codeql (if enabled)
+- [ ] Add status badges (build, security scan) post-publication
+
+### 10. Final Gate
+- [ ] Manual diff review: No accidental binary/credential additions
+- [ ] Tag reviewer for security sign-off if high-impact change
+
+---
+### Standard Commands Bundle
+```
+# Run full local security sweep (requires gitleaks installed)
+pwsh ./scripts/security-scan.ps1
+```
+
+### Agent Instructions (Automation Assistants)
+Agents MUST perform the following before suggesting a push:
+1. Run secret scan (gitleaks) – if tool not present, instruct user to install.
+2. Run dependency vulnerability listing.
+3. Report any HIGH/CRITICAL issues explicitly.
+4. Refuse to proceed if secrets are embedded in code/config; prompt for remediation.
+
+If a build step is required to surface analyzers, you MUST prompt the user explicitly per the project rule above.
+
+---
+### Future Improvements (Track & Implement Incrementally)
+- Add CodeQL workflow
+- Add SBOM generation (`dotnet build /property:GeneratePackageOnBuild=true` + `syft`) & sign artifacts
+- Integrate dependency auto-update tooling (Dependabot)
+- Add container image scanning (e.g., Trivy) once images are published
+
+---
+End Security Checklist

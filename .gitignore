@@ -530,3 +530,16 @@ nbdist/
 .\#*
 
 # End of https://www.toptal.com/developers/gitignore/api/rider,visualstudio,dotnetcore
+
+# --- Custom Security Hygiene Additions ---
+# Ignore environment files containing secrets
+*.env
+!*.env.example
+appsettings.*.json 
+
+# Secret scan reports
+security-scan-report.json
+security-scan-report.txt
+
+# Gitleaks cache
+.gitleaks*

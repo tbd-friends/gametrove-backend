@@ -1,0 +1,63 @@
+﻿name: Security Scan
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main ]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          version: latest
+        continue-on-error: true
+
+      - name: Run gitleaks manually (json report)
+        run: |
+          gitleaks detect --config .gitleaks.toml --report-format json --report-path security-scan-report.json || true
+
+      - name: Upload gitleaks report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report
+          path: security-scan-report.json
+
+      - name: Dependency vulnerability scan
+        run: |
+          dotnet restore
+          dotnet list package --vulnerable --include-transitive > security-scan-vulns.txt || true
+
+      - name: Upload dependency vuln report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-vulns
+          path: security-scan-vulns.txt
+
+      - name: Fail on critical/high findings (basic heuristic)
+        run: |
+          set -e
+          if grep -qiE "CRITICAL|HIGH" security-scan-vulns.txt; then
+            echo "High/Critical dependency vulnerabilities detected." && exit 1
+          fi
+          if grep -qi '"Description"' security-scan-report.json; then
+            echo "Potential secrets detected by gitleaks." && exit 1
+          fi
+          echo "No blocking findings."
+
