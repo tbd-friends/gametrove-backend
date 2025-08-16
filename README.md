@@ -1,5 +1,7 @@
 ﻿# GameTrove 25
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A modular .NET 9 solution for video game cataloging and tracking, built with a clean, layered architecture, FastEndpoints for lightweight APIs, EF Core for persistence, and .NET Aspire for local distributed application orchestration.
 
 ## High-Level Architecture
@@ -196,11 +198,16 @@ dotnet ef migrations list \
 - Consider adding Git hooks / secret scanners
 
 ## License
-Add your chosen license (MIT, Apache 2.0, etc.) here.
+Released under the MIT License. See the LICENSE file in the repository root for full text.
+
+(c) 2025 Terry Burns-Dyson
+
+You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software, subject to inclusion of the copyright & permission notice.
+
+SPDX-License-Identifier: MIT
 
 ## Status
 Early development; expect breaking changes as modules evolve.
 
 ---
 Generated README – refine as the project matures.
-
