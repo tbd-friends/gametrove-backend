@@ -14,7 +14,6 @@ public class PlatformConfiguration : IEntityTypeConfiguration<Platform>
             .WithOne(m => m.Platform)
             .HasForeignKey<IgdbPlatformMapping>(p => p.PlatformId)
             .HasPrincipalKey<Platform>(p => p.Id)
-            .HasConstraintName(null)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

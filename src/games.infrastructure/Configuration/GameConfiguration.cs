@@ -24,7 +24,6 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
             .WithOne(m => m.Game)
             .HasForeignKey<IgdbGameMapping>(m => m.GameId)
             .HasPrincipalKey<Game>(g => g.Id)
-            .HasConstraintName(null)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }
