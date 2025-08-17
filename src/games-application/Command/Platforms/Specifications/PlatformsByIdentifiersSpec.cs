@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
 
-namespace games_application.Command.Platforms.Specs;
+namespace games_application.Command.Platforms.Specifications;
 
 public sealed class PlatformsByIdentifiersSpec : Specification<Platform>
 {

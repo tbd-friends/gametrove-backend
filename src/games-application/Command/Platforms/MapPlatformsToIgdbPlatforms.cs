@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using games_application.Command.Platforms.Specs;
+using games_application.Command.Platforms.Specifications;
 using Mediator;
 using shared_kernel;
 using TbdDevelop.GameTrove.Games.Domain.Entities;

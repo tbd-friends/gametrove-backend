@@ -4,11 +4,11 @@ using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace TbdDevelop.GameTrove.Games.Infrastructure.Configuration;
 
-public class IgdbPlatformMappingConfiguration : IEntityTypeConfiguration<IgdbPlatformMapping>
+public class IgdbGameMappingConfiguration : IEntityTypeConfiguration<IgdbGameMapping>
 {
-    public void Configure(EntityTypeBuilder<IgdbPlatformMapping> builder)
+    public void Configure(EntityTypeBuilder<IgdbGameMapping> builder)
     {
-        builder.ToTable("IgdbPlatformMappings");
+        builder.ToTable("IgdbGameMappings");
 
         builder.HasKey(k => k.Id);
     }

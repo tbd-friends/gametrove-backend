@@ -20,7 +20,7 @@ public class Search(IGDBApiClient client) : EndpointBaseAsync
             {
                 Endpoint = Endpoint.Games,
                 Search = IgdbLanguage.Search($"{parameters.Term}"),
-                Where = IgdbLanguage.Where($"platforms.name=*\"{parameters.Platform}\"*"),
+                Where = IgdbLanguage.Where($"platforms=({parameters.PlatformId})"),
                 Limit = IgdbLanguage.Limit(15)
             }, cancellationToken);
 
@@ -59,7 +59,7 @@ public class Search(IGDBApiClient client) : EndpointBaseAsync
     public class Parameters
     {
         public string Term { get; set; } = null!;
-        public string? Platform { get; set; }
+        public int PlatformId { get; set; }
     }
 
     public class Result

@@ -1,15 +1,25 @@
 ﻿namespace TbdDevelop.GameTrove.Games.Domain.Entities;
 
-public class Game
+public partial class Game
 {
     public int Id { get; set; }
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
     public int PlatformId { get; set; }
     public int? PublisherId { get; set; }
-    public DateTime? UpdatedDate { get; set; }
-    public Guid Identifier { get; set; }
+    public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
+    public Guid Identifier { get; set; } = Guid.NewGuid();
+
+    private Game(
+        string name,
+        int platformId)
+    {
+        Name = name;
+        PlatformId = platformId;
+    }
 
     public virtual Platform Platform { get; set; } = null!;
     public virtual Publisher? Publisher { get; set; }
     public virtual ICollection<GameCopy> Copies { get; set; } = null!;
+
+    public virtual IgdbGameMapping? Mapping { get; set; }
 }

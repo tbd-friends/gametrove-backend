@@ -8,8 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Ardalis.Result" />
       <PackageReference Include="Ardalis.Specification" />
       <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
+      <PackageReference Include="FluentValidation" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+      <PackageReference Include="Mediator.Abstractions" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
     </ItemGroup>
 
 </Project>

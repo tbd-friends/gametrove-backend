@@ -5,6 +5,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{837D9A05-F6D4-479F-95B9-76AC43061B64}"
 	ProjectSection(SolutionItems) = preProject
 		scripts\security-scan.ps1 = scripts\security-scan.ps1
+		scripts\View.sql = scripts\View.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{83A849F2-8CDB-4A55-A3D1-5B98227665A7}"

@@ -7,4 +7,10 @@
         <RootNamespace>TbdDevelop.GameTrove.Games.Domain</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Update="Entities\Game.Behaviors.cs">
+        <DependentUpon>Game.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

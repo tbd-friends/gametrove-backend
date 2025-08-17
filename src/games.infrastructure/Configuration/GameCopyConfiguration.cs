@@ -9,7 +9,9 @@ public class GameCopyConfiguration : IEntityTypeConfiguration<GameCopy>
     public void Configure(EntityTypeBuilder<GameCopy> builder)
     {
         builder.ToTable("GameCopies");
-        
+
+        builder.HasKey(g => g.Id);
+
         builder.Ignore(b => b.IsNew);
         builder.Ignore(b => b.IsCompleteInBox);
         builder.Ignore(b => b.IsLoose);

@@ -13,6 +13,8 @@ public class PlatformConfiguration : IEntityTypeConfiguration<Platform>
         builder.HasOne(p => p.Mapping)
             .WithOne(m => m.Platform)
             .HasForeignKey<IgdbPlatformMapping>(p => p.PlatformId)
-            .HasPrincipalKey<Platform>(p => p.Id);
+            .HasPrincipalKey<Platform>(p => p.Id)
+            .HasConstraintName(null)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

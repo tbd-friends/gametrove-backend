@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using games_application.Command.Games;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using shared_kernel.Extensions;
 
 namespace games_application;
 
@@ -9,6 +12,12 @@ public static class ApplicationHostBuilderExtensions
         where TBuilder : IHostApplicationBuilder
     {
         builder.Services.AddMediator(options => { options.ServiceLifetime = ServiceLifetime.Scoped; });
+
+        builder.AddMediatorFluentValidation(configure =>
+        {
+            configure.UseFluentValidation()
+                .AddValidator<IValidator<AddNewGame.Command>, AddNewGame.Validator>();
+        });
 
         return builder;
     }
