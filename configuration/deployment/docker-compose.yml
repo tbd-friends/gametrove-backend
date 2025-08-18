@@ -2,4 +2,6 @@ include:
   - path: ./SqlServer/docker-compose.yml
     env_file:
       - ./services.env
-  
+  - path: ./Mongo/docker-compose.yml
+    env_file:
+      - ./services.env

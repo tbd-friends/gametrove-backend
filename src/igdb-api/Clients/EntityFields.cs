@@ -123,12 +123,12 @@ public class EntityFields
     private static IEnumerable<string>? GetFieldNameFromProperty(PropertyInfo property)
     {
         var jsonProperty = property.GetCustomAttribute<JsonPropertyNameAttribute>();
-        var propertyName = (jsonProperty != null ? jsonProperty.Name : property.Name).ToLower();
+        var propertyName = (jsonProperty != null ? jsonProperty.Name : ConvertToSnakeCase(property.Name)).ToLower();
         var referenceProperty = property.GetCustomAttribute<ReferenceAttribute>();
 
         if (property.PropertyType.IsTypeDefinition && referenceProperty is null)
         {
-            return new[] { propertyName };
+            return [propertyName];
         }
 
         if (!property.PropertyType.IsGenericType)
@@ -149,7 +149,69 @@ public class EntityFields
             var fields = GetFieldsFrom(property.PropertyType.GenericTypeArguments[0]);
 
             return (from f in fields select $"{propertyName}.{f}");
-
         }
+    }
+
+    /// <summary>
+    /// Snake case is the default style for the IgdbApi fields. We can still override with JsonPropertyName
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    private static string ConvertToSnakeCase(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return string.Empty;
+        }
+
+        var sb = new System.Text.StringBuilder();
+
+        for (int i = 0; i < name.Length; i++)
+        {
+            var c = name[i];
+
+            if (char.IsWhiteSpace(c) || c == '-' || c == '_')
+            {
+                if (sb.Length > 0 && sb[^1] != '_')
+                {
+                    sb.Append('_');
+                }
+         
+                continue;
+            }
+
+            if (char.IsUpper(c))
+            {
+                var prevIsLower = i > 0 && char.IsLower(name[i - 1]);
+                var nextIsLower = i + 1 < name.Length && char.IsLower(name[i + 1]);
+
+                if (i > 0 && (prevIsLower || nextIsLower) && sb[^1] != '_')
+                {
+                    sb.Append('_');
+                }
+
+                sb.Append(char.ToLowerInvariant(c));
+            }
+            else if (char.IsDigit(c))
+            {
+                if (i > 0 && !char.IsDigit(name[i - 1]) && sb[^1] != '_')
+                {
+                    sb.Append('_');
+                }
+                
+                sb.Append(c);
+            }
+            else
+            {
+                sb.Append(c);
+            }
+        }
+
+        if (sb.Length > 0 && sb[^1] == '_')
+        {
+            sb.Length--;
+        }
+
+        return sb.ToString();
     }
 }

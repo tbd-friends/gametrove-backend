@@ -50,6 +50,7 @@ public class List(ISender sender)
                     select new GameListResponseModel
                     {
                         Id = g.Identifier,
+                        IgdbGameId = g.IgdbGameId,
                         Description = g.Name,
                         Platform = WithPlatform(g),
                         Publisher = WithPublisher(g),
@@ -72,6 +73,7 @@ public class List(ISender sender)
         {
             Id = g.Platform.Identifier,
             Description = g.Platform.Name,
+            IgdbPlatformId = g.Platform.IgdbPlatformId
         };
     }
 

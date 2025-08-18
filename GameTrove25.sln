@@ -8,12 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{837D
 		scripts\View.sql = scripts\View.sql
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{83A849F2-8CDB-4A55-A3D1-5B98227665A7}"
-	ProjectSection(SolutionItems) = preProject
-		configuration\deployment\docker-compose.yml = configuration\deployment\docker-compose.yml
-		configuration\deployment\SqlServer\docker-compose.yml = configuration\deployment\SqlServer\docker-compose.yml
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aspire-app-host", "configuration\aspire\aspire-app-host\aspire-app-host.csproj", "{78E9B93A-1701-4823-881C-0C59BE2F3565}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "games-api", "src\games-api\games-api.csproj", "{43AD5156-16BF-4E11-AE32-8C7825C30CBB}"
@@ -176,7 +170,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F5D34B0B-685C-4B41-BF4B-9CB6A454B258} = {1AD55C0B-FB12-4353-A997-A7BFF8C7D5F5}
-		{83A849F2-8CDB-4A55-A3D1-5B98227665A7} = {837D9A05-F6D4-479F-95B9-76AC43061B64}
 		{78E9B93A-1701-4823-881C-0C59BE2F3565} = {11335216-C013-42B0-98E4-C62F121F2182}
 		{68E60424-3458-42F8-8B5E-BE8D2F225758} = {11335216-C013-42B0-98E4-C62F121F2182}
 		{6F57B1F6-8B95-42DF-8C62-8E29CB06C550} = {0C960153-EFE1-4737-92FE-5E91A47393C5}

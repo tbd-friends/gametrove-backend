@@ -1,13 +1,14 @@
 ﻿using Ardalis.ApiEndpoints;
 using igdb_api.Clients;
 using igdb_api.Infrastructure;
+using igdb_api.Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Endpoint = igdb_api.Clients.Endpoint;
 
 namespace igdb_api.Endpoints.Platforms;
 
 [Route("platforms")]
-public class List(IGDBApiClient client) : EndpointBaseAsync
+public class List(IgdbApiClient client) : EndpointBaseAsync
     .WithRequest<List.Parameters>
     .WithActionResult<IEnumerable<List.Result>>
 {

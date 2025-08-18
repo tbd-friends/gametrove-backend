@@ -4,7 +4,7 @@ using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace games_application.Query.Games.Specifications;
 
-public class SingleGameWithCopyDetailSpec : Specification<Game, GameWithCopyDetailDto>,
+public sealed class SingleGameWithCopyDetailSpec : Specification<Game, GameWithCopyDetailDto>,
     ISingleResultSpecification<Game, GameWithCopyDetailDto>
 {
     public SingleGameWithCopyDetailSpec(Guid identifier)
@@ -13,11 +13,15 @@ public class SingleGameWithCopyDetailSpec : Specification<Game, GameWithCopyDeta
             .Where(g => g.Identifier == identifier)
             .Include(g => g.Copies)
             .ThenInclude(c => c.PriceChartingAssociation)
+            .Include(g => g.Mapping)
             .Include(g => g.Publisher)
             .Include(g => g.Platform)
+            .ThenInclude(p => p.Mapping)
+            .AsNoTracking()
             .Select(g => new GameWithCopyDetailDto
             {
                 Id = g.Id,
+                IgdbGameId = g.Mapping != null ? g.Mapping.IgdbGameId : null,
                 Name = g.Name,
                 Identifier = g.Identifier,
                 Platform = g.Platform.AsDto(),

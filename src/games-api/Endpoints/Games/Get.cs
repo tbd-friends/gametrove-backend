@@ -13,9 +13,9 @@ public class Get(ISender sender)
     public override void Configure()
     {
         Get("games/{identifier}");
-        
+
         Policies("AuthPolicy");
-        
+
         Summary(s =>
         {
             s.Summary = "Get game details by identifier";
@@ -36,11 +36,13 @@ public class Get(ISender sender)
         return TypedResults.Ok(new GameDetailResponseModel
         {
             Id = result.Value.Identifier,
+            IgdbGameId = result.Value.IgdbGameId,
             Description = result.Value.Name,
             Platform = new PlatformResponseModel
             {
                 Id = result.Value.Platform.Identifier,
                 Description = result.Value.Platform.Name,
+                IgdbPlatformId = result.Value.Platform.IgdbPlatformId
             },
             Publisher = result.Value.Publisher != null
                 ? new PublisherResponseModel

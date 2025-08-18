@@ -10,13 +10,17 @@ public class PagedGamesWithDetailSpec : Specification<Game, GameDto>
     {
         Query
             .Where(g => searchTerm == null || g.Name.Contains(searchTerm))
+            .Include(g => g.Mapping)
             .Include(g => g.Platform)
+            .ThenInclude(p => p.Mapping)
             .Include(g => g.Publisher)
             .Skip((start - 1) * limit)
             .Take(limit)
+            .AsNoTracking()
             .Select(g => new GameDto
             {
                 Id = g.Id,
+                IgdbGameId = g.Mapping != null ? g.Mapping.IgdbGameId : null,
                 Name = g.Name,
                 Identifier = g.Identifier,
                 Platform = g.Platform.AsDto(),

@@ -6,7 +6,7 @@ public static class Extensions
 {
     public static PlatformDto AsDto(this Platform platform)
     {
-        return new PlatformDto(platform.Identifier, platform.Name);
+        return new PlatformDto(platform.Identifier, platform.Name, platform.Mapping?.IgdbPlatformId);
     }
 
     public static PublisherDto AsDto(this Publisher publisher)

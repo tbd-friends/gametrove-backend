@@ -3,6 +3,6 @@
 public sealed class PlatformResponseModel : ResponseModelBase
 {
     public string? Manufacturer { get; set; }
-    public int IgdbPlatformId { get; set; }
+    public int? IgdbPlatformId { get; set; }
     protected override string UrlBase { get; set; } = "platforms";
 }

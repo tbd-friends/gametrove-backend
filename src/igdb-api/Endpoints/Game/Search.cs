@@ -1,13 +1,13 @@
 ﻿using Ardalis.ApiEndpoints;
 using igdb_api.Clients;
-using igdb_api.Infrastructure;
+using igdb_api.Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using Endpoint = igdb_api.Clients.Endpoint;
 
 namespace igdb_api.Endpoints.Game;
 
 [Route("search")]
-public class Search(IGDBApiClient client) : EndpointBaseAsync
+public class Search(IgdbApiClient client) : EndpointBaseAsync
     .WithRequest<Search.Parameters>
     .WithActionResult<IEnumerable<Search.Result>>
 {

@@ -12,12 +12,21 @@
     <ItemGroup>
         <PackageReference Include="Ardalis.ApiEndpoints" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+        <PackageReference Include="MongoDB.EntityFrameworkCore" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\configuration\aspire\aspire-service-defaults\aspire-service-defaults.csproj" />
       <ProjectReference Include="..\authentication\authentication.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="appsettings.Development.json" />
+      <None Include="appsettings.Development.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 
