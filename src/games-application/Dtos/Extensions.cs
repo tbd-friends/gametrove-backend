@@ -1,6 +1,6 @@
 ﻿using TbdDevelop.GameTrove.Games.Domain.Entities;
 
-namespace games_application.Query.Games.Models;
+namespace games_application.Dtos;
 
 public static class Extensions
 {

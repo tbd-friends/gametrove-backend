@@ -1,4 +1,5 @@
 ﻿using Ardalis.Specification;
+using games_application.Dtos;
 using games_application.Query.Games.Models;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
 

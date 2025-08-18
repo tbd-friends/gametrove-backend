@@ -1,4 +1,6 @@
-﻿namespace games_application.Query.Games.Models;
+﻿using games_application.Dtos;
+
+namespace games_application.Query.Games.Models;
 
 public record GameDto
 {
