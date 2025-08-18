@@ -2,6 +2,7 @@
 using games_application.Command.Games;
 using Mediator;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace TbdDevelop.GameTrove.GameApi.Endpoints.Games;
 
@@ -10,7 +11,7 @@ public class Link(ISender sender)
 {
     public override void Configure()
     {
-        Post("games/{identifier}/link");
+        Post("games/{identifier:guid}/link");
 
         Policies("AuthPolicy");
 
@@ -35,7 +36,7 @@ public class Link(ISender sender)
 
     public class Request
     {
-        public required Guid Identifier { get; set; }
+        [FromRoute(Name = "identifier")] public Guid Identifier { get; set; }
         public int IgdbGameId { get; set; }
     }
 }
