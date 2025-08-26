@@ -14,11 +14,7 @@ public class Post(ISender sender)
 
         Policies("AuthPolicy");
 
-        Summary(s =>
-        {
-            s.Summary = "Get list of available platforms";
-            s.Params["search"] = "Search term for filtering games";
-        });
+        Summary(s => { s.Summary = "Register a new game"; });
     }
 
     public override async Task<Results<Ok<Guid>, BadRequest>> ExecuteAsync(Request req, CancellationToken ct)

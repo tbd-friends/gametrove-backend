@@ -1,4 +1,5 @@
-﻿using Ardalis.ApiEndpoints;
+﻿using System.Text.RegularExpressions;
+using Ardalis.ApiEndpoints;
 using igdb_api.Clients;
 using igdb_api.Infrastructure.Cache;
 using igdb_api.Infrastructure.Models;
@@ -28,7 +29,7 @@ public class FetchGame(IIgdbCacheWrapper cache) : EndpointBaseAsync
             Genres = result.Genres.Select(g => new Result.Genre { Name = g.Name }),
             Themes = result.Themes.Select(g => new Result.Theme { Name = g.Name }),
             Screenshots = result.Screenshots.Select(s => new Result.Screenshot
-                { Url = s.Url, Height = s.Height, Width = s.Width, ImageId = s.ImageId })
+                { Thumbnail = s.Url, Height = s.Height, Width = s.Width, ImageId = s.ImageId })
         });
     }
 
@@ -64,11 +65,23 @@ public class FetchGame(IIgdbCacheWrapper cache) : EndpointBaseAsync
 
         public class Screenshot
         {
+            private static readonly Regex _urlRegex = new(@".*upload\\/(?<size>.*)\\/.*", RegexOptions.Compiled);
+
             public string ImageId { get; set; }
-            public string Url { get; set; }
+            public string Thumbnail { get; set; }
+            public string Medium => TransformUrl(Thumbnail, "t_720p");
 
             public int Height { get; set; }
             public int Width { get; set; }
+
+            private static string TransformUrl(string url, string newSize)
+            {
+                if (string.IsNullOrEmpty(url))
+                    return url;
+
+                return _urlRegex.Replace(url, match =>
+                    match.Value.Replace(match.Groups["size"].Value, newSize));
+            }
         }
     }
 }

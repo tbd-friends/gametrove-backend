@@ -25,4 +25,18 @@ public partial class Game
             };
         }
     }
+
+    public void UpdateDetails(string name, int platformId, int? publisherId)
+    {
+        var shouldUpdateDetails = Name != name || PlatformId != platformId || PublisherId != publisherId;
+
+        if (!shouldUpdateDetails)
+        {
+            return;
+        }
+
+        Name = name;
+        PlatformId = platformId;
+        PublisherId = publisherId;
+    }
 }

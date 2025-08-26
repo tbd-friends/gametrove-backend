@@ -15,7 +15,7 @@ public sealed class PlatformListSpec : Specification<Platform, PlatformResult>
                 Identifier = p.Identifier,
                 Name = p.Name,
                 Manufacturer = p.Manufacturer,
-                IgdbPlatformId = p.Mapping != null ? p.Mapping.IgdbPlatformId : 0,
+                IgdbPlatformId = p.Mapping != null ? p.Mapping.IgdbPlatformId : 0
             });
     }
 }
