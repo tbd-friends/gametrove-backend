@@ -10,6 +10,7 @@ public class GamesMatchingTermSpec : Specification<Game>
         Query
             .Where(g => searchTerm == null || g.Name.Contains(searchTerm))
             .Include(g => g.Platform)
-            .Include(g => g.Publisher);
+            .Include(g => g.Publisher)
+            .OrderBy(g => g.Name);
     }
 }

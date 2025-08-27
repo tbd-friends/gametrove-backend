@@ -11,6 +11,7 @@ public class PagedGamesWithDetailSpec : Specification<Game, GameDto>
     {
         Query
             .Where(g => searchTerm == null || g.Name.Contains(searchTerm))
+            .OrderBy(g => g.Name)
             .Include(g => g.Mapping)
             .Include(g => g.Platform)
             .ThenInclude(p => p.Mapping)
