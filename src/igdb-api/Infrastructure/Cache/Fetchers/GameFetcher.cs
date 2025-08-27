@@ -1,6 +1,5 @@
 ﻿using igdb_api.Clients;
 using igdb_api.Infrastructure.Models;
-using Microsoft.EntityFrameworkCore;
 using Endpoint = igdb_api.Clients.Endpoint;
 
 namespace igdb_api.Infrastructure.Cache.Fetchers;
@@ -12,7 +11,7 @@ public interface IFetcher
 
 public class GameFetcher(
     IgdbApiClient client,
-    IDbContextFactory<CacheDbContext> dbContextFactory
+    IRepository<Game> games
 ) : IFetcher
 {
     public async ValueTask<bool> FetchById(int entity, CancellationToken cancellationToken)

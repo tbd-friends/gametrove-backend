@@ -1,38 +1,33 @@
-﻿using Ardalis.ApiEndpoints;
-using igdb_api.Clients;
-using igdb_api.Infrastructure;
-using igdb_api.Infrastructure.Models;
-using Microsoft.AspNetCore.Mvc;
-using Endpoint = igdb_api.Clients.Endpoint;
+﻿using FastEndpoints;
+using igdb_application.Query.Platforms;
+using Mediator;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace igdb_api.Endpoints.Platforms;
 
-[Route("platforms")]
-public class List(IgdbApiClient client) : EndpointBaseAsync
-    .WithRequest<List.Parameters>
-    .WithActionResult<IEnumerable<List.Result>>
+public class List(ISender sender) : Endpoint<List.Parameters, Results<Ok<IEnumerable<List.Result>>, NotFound>>
 {
-    [HttpGet]
-    public override async Task<ActionResult<IEnumerable<Result>>> HandleAsync([FromQuery] Parameters parameters,
-        CancellationToken cancellationToken = new())
+    public override void Configure()
     {
-        var matching = await client.Query(
-            new IGDBQuery<PlatformSummary>
-            {
-                Endpoint = Endpoint.Platforms,
-                Where = parameters.Name != null ? IgdbLanguage.Where($"platforms.name=*\"{parameters.Name}\"*") : null,
-                Limit = IgdbLanguage.Limit(250)
-            }, cancellationToken);
+        Get("platforms");
 
-        if (matching is null) return NotFound();
+        Policies("AuthPolicy");
 
-        return Ok((from r in matching
+        Summary(s => { s.Description = "List Platforms from IGDB side"; });
+    }
+
+    public override async Task<Results<Ok<IEnumerable<Result>>, NotFound>> ExecuteAsync(Parameters parameters,
+        CancellationToken ct)
+    {
+        var results = await sender.Send(new ListPlatforms.Query(parameters.Name), ct);
+
+        return TypedResults.Ok((from r in results.Value
             select new Result
             {
                 Id = r.Id,
                 Name = r.Name,
                 AlternativeName = r.AlternativeName,
-            }).ToList());
+            }).AsEnumerable());
     }
 
     public class Parameters

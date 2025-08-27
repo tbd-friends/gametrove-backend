@@ -1,29 +1,30 @@
-﻿using Ardalis.ApiEndpoints;
-using igdb_api.Infrastructure.Cache;
-using igdb_api.Infrastructure.Cache.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using FastEndpoints;
+using igdb_application.Command.Caching;
+using Mediator;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace igdb_api.Endpoints.Cache;
 
-public class Update(CacheDbContext context) : EndpointBaseAsync
-    .WithRequest<Update.Parameters>
-    .WithActionResult
+public class Update(ISender sender) : Endpoint<Update.Parameters, Ok>
 {
-    [HttpPost("cache/{id}")]
-    public override async Task<ActionResult> HandleAsync([FromRoute] Parameters parameters,
-        CancellationToken cancellationToken = new())
+    public override void Configure()
     {
-        await context.AddAsync(new CacheQueueEntry
+        Post("update/{id}");
+
+        Policies("AuthPolicy");
+        
+        Summary(s =>
         {
-            EntityId = parameters.Id,
-            EntityType = "game",
-            Entered = DateTime.UtcNow
-        }, cancellationToken);
+            s.Summary = "Queue an igdb mapped game for caching details";
+            s.Params["id"] = "The igdb id of the game";
+        });
+    }
 
-        await context.SaveChangesAsync(cancellationToken);
-
-        return Ok();
+    public override async Task<Ok> ExecuteAsync(Parameters parameters, CancellationToken ct)
+    {
+        await sender.Send(new EnqueueCacheRequest.Command(parameters.Id, "game"), ct);
+        
+        return TypedResults.Ok();
     }
 
     public class Parameters

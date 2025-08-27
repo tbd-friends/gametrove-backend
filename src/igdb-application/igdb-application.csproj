@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <RootNamespace>igdb_application</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Mediator.Abstractions" />
+      <PackageReference Include="Mediator.SourceGenerator">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\igdb-domain\igdb-domain.csproj" />
+      <ProjectReference Include="..\shared-kernel\shared-kernel.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Command\" />
+    </ItemGroup>
+
+</Project>

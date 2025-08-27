@@ -1,6 +1,7 @@
-﻿using igdb_api.Infrastructure.Cache.Fetchers;
-using igdb_api.Infrastructure.Cache.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Ardalis.Specification;
+using igdb_api.Infrastructure.Cache.Fetchers;
+using igdb_domain.Entities;
+using shared_kernel;
 
 namespace igdb_api.Infrastructure.Cache.Services;
 
@@ -12,12 +13,9 @@ public class CacheFetchBackgroundService(IServiceScopeFactory scopeFactory) : Ba
         {
             using var scope = scopeFactory.CreateScope();
 
-            var contextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<CacheDbContext>>();
+            var repository = scope.ServiceProvider.GetRequiredService<IRepository<CacheQueueEntry>>();
 
-            await using var dbContext = await contextFactory.CreateDbContextAsync(stoppingToken);
-
-            var queue = dbContext.Set<CacheQueueEntry>().Where(e => e.State == null)
-                .OrderBy(e => e.Entered);
+            var queue = await repository.ListAsync(new QueuedRequestByEnteredDateSpec(), stoppingToken);
 
             foreach (var entry in queue)
             {
@@ -25,23 +23,19 @@ public class CacheFetchBackgroundService(IServiceScopeFactory scopeFactory) : Ba
                 {
                     entry.State = "Unable to process entry";
 
-                    dbContext.Update(entry);
-                    
-                    await dbContext.SaveChangesAsync(stoppingToken);
-                    
+                    await repository.UpdateAsync(entry, stoppingToken);
+
                     continue;
                 }
 
-                dbContext.Remove(entry);
-
-                await dbContext.SaveChangesAsync(stoppingToken);
+                await repository.DeleteAsync(entry, stoppingToken);
             }
 
             await Task.Delay(10000, stoppingToken);
         }
     }
 
-    private async Task<bool> ProcessQueueEntry(CancellationToken stoppingToken, CacheQueueEntry entry,
+    private static async Task<bool> ProcessQueueEntry(CancellationToken stoppingToken, CacheQueueEntry entry,
         IServiceScope scope)
     {
         bool hasProcessed = false;
@@ -54,7 +48,7 @@ public class CacheFetchBackgroundService(IServiceScopeFactory scopeFactory) : Ba
 
                 if (fetch is null)
                 {
-                    throw new Exception("Fetcher not fetching");
+                    throw new FetcherUnavailableException(typeof(GameFetcher));
                 }
 
                 hasProcessed = await fetch.FetchById(entry.EntityId, stoppingToken);
@@ -63,5 +57,17 @@ public class CacheFetchBackgroundService(IServiceScopeFactory scopeFactory) : Ba
         }
 
         return hasProcessed;
+    }
+}
+
+public class FetcherUnavailableException(Type type) : Exception($"{type.Name} Unavailable");
+
+public sealed class QueuedRequestByEnteredDateSpec : Specification<CacheQueueEntry>
+{
+    public QueuedRequestByEnteredDateSpec()
+    {
+        Query
+            .Where(q => q.State == null)
+            .OrderBy(q => q.Entered);
     }
 }

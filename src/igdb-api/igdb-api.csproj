@@ -10,16 +10,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ardalis.ApiEndpoints" />
+        <PackageReference Include="FastEndpoints" />
+        <PackageReference Include="FastEndpoints.OpenTelemetry" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
         <PackageReference Include="Microsoft.Extensions.Hosting" />
-        <PackageReference Include="MongoDB.EntityFrameworkCore" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\configuration\aspire\aspire-service-defaults\aspire-service-defaults.csproj" />
       <ProjectReference Include="..\authentication\authentication.csproj" />
+      <ProjectReference Include="..\igdb-application\igdb-application.csproj" />
+      <ProjectReference Include="..\igdb-infrastructure-api\igdb-infrastructure-api.csproj" />
+      <ProjectReference Include="..\igdb-infrastructure\igdb-infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,6 +30,16 @@
       <None Include="appsettings.Development.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <Content Remove="Infrastructure\**" />
+      <None Remove="Infrastructure\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Infrastructure\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Infrastructure\**" />
     </ItemGroup>
 
 

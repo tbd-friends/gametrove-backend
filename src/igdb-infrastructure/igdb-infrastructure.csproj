@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <RootNamespace>igdb_infrastructure</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
+      <PackageReference Include="MongoDB.EntityFrameworkCore" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\igdb-domain\igdb-domain.csproj" />
+      <ProjectReference Include="..\shared-kernel\shared-kernel.csproj" />
+    </ItemGroup>
+
+</Project>
