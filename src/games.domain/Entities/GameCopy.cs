@@ -8,7 +8,7 @@ public class GameCopy
     public decimal? Cost { get; set; }
     public int Condition { get; set; }
     public string? Upc { get; set; }
-    public DateTime UpdatedDate { get; set; }
+    public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
     public Guid Identifier { get; set; }
 
     public bool IsNew => (Condition & 256) == 256;

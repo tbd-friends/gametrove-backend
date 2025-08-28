@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
 
-namespace games_application.Command.Games.Specifications;
+namespace games_application.Specifications;
 
 public class GameByIdentifierSpec : Specification<Game>, ISingleResultSpecification<Game>
 {

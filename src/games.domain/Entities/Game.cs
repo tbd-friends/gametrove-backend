@@ -19,7 +19,7 @@ public partial class Game
 
     public virtual Platform Platform { get; set; } = null!;
     public virtual Publisher? Publisher { get; set; }
-    public virtual ICollection<GameCopy> Copies { get; set; } = null!;
+    public virtual ICollection<GameCopy> Copies { get; set; } = new List<GameCopy>();
 
     public virtual IgdbGameMapping? Mapping { get; set; }
 }

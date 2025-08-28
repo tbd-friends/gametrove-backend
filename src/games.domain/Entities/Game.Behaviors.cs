@@ -39,4 +39,15 @@ public partial class Game
         PlatformId = platformId;
         PublisherId = publisherId;
     }
+
+    public void AddCopy(DateTime purchaseDate, int condition, decimal? cost, string? upc)
+    {
+        Copies.Add(new GameCopy
+        {
+            Cost = cost,
+            Condition = condition,
+            PurchaseDate = purchaseDate,
+            Upc = upc
+        });
+    }
 }
