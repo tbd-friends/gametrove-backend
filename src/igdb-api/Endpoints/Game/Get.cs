@@ -31,6 +31,7 @@ public class Get(ISender sender)
         return TypedResults.Ok(new Result
         {
             Id = result.Id,
+            Cover = result.Cover is not null ? Result.CoverArt.FromCover(result.Cover) : null,
             Name = result.Name,
             Summary = result.Storyline ?? result.Summary,
             Platforms = result.Platforms.Select(p => new Result.Platform { Name = p.Name }),
@@ -48,12 +49,35 @@ public class Get(ISender sender)
     public class Result
     {
         public int Id { get; set; }
+        public CoverArt? Cover { get; set; }
         public string Name { get; set; } = null!;
         public string Summary { get; set; } = null!;
         public IEnumerable<Platform> Platforms { get; set; } = null!;
         public IEnumerable<Genre> Genres { get; set; } = null!;
         public IEnumerable<Theme> Themes { get; set; } = null!;
         public IEnumerable<Screenshot> Screenshots { get; set; } = null!;
+
+        public class CoverArt : IgdbImage
+        {
+            public required string ImageId { get; set; }
+            public required string Thumbnail { get; set; }
+            public required string Medium { get; set; }
+
+            public int Height { get; set; }
+            public int Width { get; set; }
+
+            public static CoverArt FromCover(CoverDto response)
+            {
+                return new CoverArt
+                {
+                    Thumbnail = response.Url,
+                    Medium = TransformUrl(response.Url, "t_720p"),
+                    Height = response.Height,
+                    Width = response.Width,
+                    ImageId = response.ImageId
+                };
+            }
+        }
 
         public class Platform
         {
@@ -70,25 +94,18 @@ public class Get(ISender sender)
             public string Name { get; set; } = null!;
         }
 
-        public class Screenshot
+        public abstract class IgdbImage
         {
-            private static readonly Regex _urlRegex = new(@".*upload\/(?<size>.*)\/.*", RegexOptions.Compiled);
+            protected static readonly Regex UrlRegex = new(@".*upload\/(?<size>.*)\/.*", RegexOptions.Compiled);
 
-            public required string ImageId { get; set; }
-            public required string Thumbnail { get; set; }
-            public required string Medium { get; set; }
-
-            public int Height { get; set; }
-            public int Width { get; set; }
-
-            private static string TransformUrl(string url, string newSize)
+            protected static string TransformUrl(string url, string newSize)
             {
                 if (string.IsNullOrEmpty(url))
                 {
                     return url;
                 }
 
-                var match = _urlRegex.Match(url);
+                var match = UrlRegex.Match(url);
 
                 if (!match.Success)
                 {
@@ -99,6 +116,17 @@ public class Get(ISender sender)
 
                 return url.Replace(currentSize, newSize);
             }
+        }
+
+        public class Screenshot : IgdbImage
+        {
+            public required string ImageId { get; set; }
+            public required string Thumbnail { get; set; }
+            public required string Medium { get; set; }
+
+            public int Height { get; set; }
+            public int Width { get; set; }
+
 
             public static Screenshot FromImageResponse(ImageDto response)
             {

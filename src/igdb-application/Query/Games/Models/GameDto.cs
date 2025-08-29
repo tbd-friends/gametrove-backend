@@ -6,6 +6,7 @@ namespace igdb_application.Query.Games.Models;
 public class GameDto
 {
     public int Id { get; set; }
+    public CoverDto? Cover { get; set; }
     public DateTimeOffset ReleaseDate { get; set; }
 
     public List<BasicInfoDto> Genres { get; set; } = [];
@@ -26,6 +27,10 @@ public class GameDto
         return new GameDto
         {
             Id = game.Id,
+            Cover = game.Cover != null
+                ? new CoverDto(game.Cover.ImageId, game.Cover.Url, game.Cover.Height, game.Cover.Width,
+                    game.Cover.AlphaChannel, game.Cover.Animated)
+                : null,
             Name = game.Name,
             Storyline = game.Storyline,
             Summary = game.Summary,

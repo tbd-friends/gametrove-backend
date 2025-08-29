@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace igdb_infrastructure_api.Client;
 
-
 public class EntityFields
 {
     private static IEnumerable<string>? GetFieldsFrom(Type type)
@@ -124,18 +123,15 @@ public class EntityFields
     {
         var jsonProperty = property.GetCustomAttribute<JsonPropertyNameAttribute>();
         var propertyName = (jsonProperty != null ? jsonProperty.Name : ConvertToSnakeCase(property.Name)).ToLower();
-        var referenceProperty = property.GetCustomAttribute<ReferenceAttribute>();
 
-        if (property.PropertyType.IsTypeDefinition && referenceProperty is null)
+        if (property.PropertyType.IsTypeDefinition && IsScalar(property.PropertyType))
         {
             return [propertyName];
         }
 
         if (!property.PropertyType.IsGenericType)
         {
-            if (referenceProperty is null) return null;
-
-            var fields = GetFieldsFrom(referenceProperty.Type);
+            var fields = GetFieldsFrom(property.PropertyType);
 
             return from f in fields select $"{propertyName}.{f}";
         }
@@ -145,7 +141,7 @@ public class EntityFields
             {
                 return [propertyName];
             }
-                
+
             var fields = GetFieldsFrom(property.PropertyType.GenericTypeArguments[0]);
 
             return (from f in fields select $"{propertyName}.{f}");
@@ -176,7 +172,7 @@ public class EntityFields
                 {
                     sb.Append('_');
                 }
-         
+
                 continue;
             }
 
@@ -198,7 +194,7 @@ public class EntityFields
                 {
                     sb.Append('_');
                 }
-                
+
                 sb.Append(c);
             }
             else
@@ -213,5 +209,25 @@ public class EntityFields
         }
 
         return sb.ToString();
+    }
+
+    private static bool IsScalar(Type type)
+    {
+        // Unwrap Nullable<T>
+        type = Nullable.GetUnderlyingType(type) ?? type;
+
+        if (type.IsEnum) return true;
+        if (type.IsPrimitive) return true;
+
+        // Common scalar reference/value types
+        if (type == typeof(string) ||
+            type == typeof(decimal) ||
+            type == typeof(DateTime) ||
+            type == typeof(DateTimeOffset) ||
+            type == typeof(Guid) ||
+            type == typeof(TimeSpan))
+            return true;
+
+        return false;
     }
 }

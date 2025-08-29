@@ -5,6 +5,7 @@ namespace igdb_domain.Entities;
 
 public class Game : IgdbEntityBase
 {
+    public Cover? Cover { get; set; }
     public int FirstReleaseDate { get; set; }
 
     public List<BasicEntityInfo> Genres { get; set; } = [];
@@ -13,7 +14,7 @@ public class Game : IgdbEntityBase
     public List<Platform> Platforms { get; set; } = [];
     public List<Image> Screenshots { get; set; } = [];
 
-    public string? Storyline { get; set; } = null!;
+    public string? Storyline { get; set; }
     public string Summary { get; set; } = null!;
 
     public List<BasicEntityInfo> Themes { get; set; } = [];
