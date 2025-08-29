@@ -2,6 +2,7 @@
 using games_application.Command.Platforms.Specifications;
 using Mediator;
 using shared_kernel;
+using shared_kernel.Contracts;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace games_application.Command.Platforms;

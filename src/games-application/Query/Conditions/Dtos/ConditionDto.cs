@@ -6,7 +6,4 @@ public class ConditionDto
 {
     public int Value { get; set; }
     public required string Name { get; set; }
-
-    public static ConditionDto FromGameCondition(GameCondition condition) =>
-        new() { Value = condition.Value, Name = condition.Name };
 }

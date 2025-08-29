@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using shared_kernel;
+using shared_kernel.Contracts;
 
 namespace igdb_infrastructure;
 

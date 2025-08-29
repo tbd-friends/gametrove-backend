@@ -3,6 +3,7 @@ using games_application.Query.Statistics.Results;
 using games_application.Query.Statistics.Specifications;
 using Mediator;
 using shared_kernel;
+using shared_kernel.Contracts;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace games_application.Query.Statistics;

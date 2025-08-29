@@ -1,7 +1,9 @@
 ﻿using Ardalis.Result;
+using games_application.Mapping;
 using games_application.Query.Conditions.Dtos;
 using Mediator;
 using shared_kernel;
+using shared_kernel.Contracts;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace games_application.Query.Conditions;
@@ -18,7 +20,7 @@ public static class FetchConditions
         {
             var results = await conditions.ListAsync(cancellationToken);
 
-            return Result.Success(results.Select(ConditionDto.FromGameCondition));
+            return Result.Success(results.Select(r => r.AsDto()));
         }
     }
 }

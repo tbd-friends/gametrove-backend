@@ -1,6 +1,7 @@
 using Authentication.Extensions;
 using FastEndpoints;
 using games_application;
+using shared_kernel_infrastructure.Extensions;
 using TbdDevelop.GameTrove.Games.Infrastructure;
 
 var builder = WebApplication
@@ -9,6 +10,7 @@ var builder = WebApplication
 builder.AddServiceDefaults();
 builder.AddInfrastructure();
 builder.AddApplication();
+builder.AddSecretStore();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

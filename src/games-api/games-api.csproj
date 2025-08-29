@@ -28,6 +28,7 @@
       <ProjectReference Include="..\authentication\authentication.csproj" />
       <ProjectReference Include="..\games-application\games-application.csproj" />
       <ProjectReference Include="..\games.infrastructure\games.infrastructure.csproj" />
+      <ProjectReference Include="..\shared-kernel-infrastructure\shared-kernel-infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

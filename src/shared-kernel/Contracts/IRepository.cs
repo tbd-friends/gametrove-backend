@@ -2,7 +2,7 @@
 using Ardalis.Specification.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace shared_kernel;
+namespace shared_kernel.Contracts;
 
 public interface IRepository<T> : IRepositoryBase<T>
     where T : class
