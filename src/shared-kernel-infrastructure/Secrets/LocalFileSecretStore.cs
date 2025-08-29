@@ -19,7 +19,7 @@ public class LocalFileSecretStore(
     private readonly IDataProtector _protector =
         provider.CreateProtector($"{config.Value.ApplicationName}.Secrets");
 
-    public async Task<string> GetSecretAsync(string key)
+    public async Task<string> GetSecretAsync(string key, CancellationToken cancellationToken)
     {
         var filePath = Path.Combine(_secretsPath, $"{key}.secret");
 
@@ -28,12 +28,12 @@ public class LocalFileSecretStore(
             return string.Empty;
         }
 
-        var encryptedData = await File.ReadAllTextAsync(filePath);
+        var encryptedData = await File.ReadAllTextAsync(filePath, cancellationToken);
 
         return _protector.Unprotect(encryptedData);
     }
 
-    public async Task SetSecretAsync(string key, string value)
+    public async Task SetSecretAsync(string key, string value, CancellationToken cancellationToken)
     {
         Directory.CreateDirectory(_secretsPath);
 
@@ -41,10 +41,10 @@ public class LocalFileSecretStore(
 
         var encryptedData = _protector.Protect(value);
 
-        await File.WriteAllTextAsync(filePath, encryptedData);
+        await File.WriteAllTextAsync(filePath, encryptedData, cancellationToken);
     }
 
-    public Task RemoveSecretAsync(string key)
+    public Task RemoveSecretAsync(string key, CancellationToken cancellationToken)
     {
         var filePath = Path.Combine(_secretsPath, $"{key}.secret");
 
@@ -56,7 +56,7 @@ public class LocalFileSecretStore(
         return Task.CompletedTask;
     }
 
-    public Task<bool> ExistsAsync(string key)
+    public Task<bool> ExistsAsync(string key, CancellationToken cancellationToken)
     {
         var filePath = Path.Combine(_secretsPath, $"{key}.secret");
 

@@ -1,6 +1,7 @@
 using Authentication.Extensions;
 using FastEndpoints;
 using games_application;
+using games_infrastructure_pricecharting_api;
 using shared_kernel_infrastructure.Extensions;
 using TbdDevelop.GameTrove.Games.Infrastructure;
 
@@ -11,6 +12,7 @@ builder.AddServiceDefaults();
 builder.AddInfrastructure();
 builder.AddApplication();
 builder.AddSecretStore();
+builder.AddPriceChartingInfrastructure();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

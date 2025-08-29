@@ -1,7 +1,6 @@
 ﻿using Ardalis.Specification;
-using games_application.Dtos;
-using games_application.Mapping;
 using games_application.Query.Games.Models;
+using games_application.SharedDtos;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace games_application.Query.Games.Specifications;

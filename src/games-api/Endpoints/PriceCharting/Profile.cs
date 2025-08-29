@@ -1,9 +1,7 @@
 ﻿using FastEndpoints;
 using games_application.Command.PriceCharting;
-using games_application.Command.Profiles;
 using Mediator;
 using Microsoft.AspNetCore.Http.HttpResults;
-using shared_kernel.Extensions;
 
 namespace TbdDevelop.GameTrove.GameApi.Endpoints.PriceCharting;
 
@@ -22,7 +20,6 @@ public class Profile(ISender sender) : Endpoint<Profile.Request, Results<Ok, Bad
     {
         var result = await sender.Send(
             new UpdatePriceChartingApiKey.Command(
-                User.GetUserIdentifier(),
                 req.PriceChartingApiKey
             ), ct);
 

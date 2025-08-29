@@ -1,12 +1,22 @@
-﻿using games_application.Dtos;
-using games_application.Query.Conditions.Dtos;
+﻿using games_application.Query.Conditions.Dtos;
+using games_application.Query.PriceCharting.Models;
 using games_application.Query.Profiles.Models;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
+using TbdDevelop.GameTrove.Games.Domain.Pricing;
 
-namespace games_application.Mapping;
+namespace games_application.SharedDtos;
 
 public static class ModelToDtoExtensions
 {
+    public static PricingDto AsDto(this Product product)
+    {
+        return new PricingDto(product.Id, 
+            product.Name, 
+            product.CompleteInBoxPrice, 
+            product.LoosePrice,
+            product.NewPrice);
+    }
+
     public static PlatformDto AsDto(this Platform platform)
     {
         return new PlatformDto(platform.Identifier, platform.Name, platform.Mapping?.IgdbPlatformId);

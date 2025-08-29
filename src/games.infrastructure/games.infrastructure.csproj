@@ -19,8 +19,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\games-application\games-application.csproj" />
       <ProjectReference Include="..\games.domain\games.domain.csproj" />
       <ProjectReference Include="..\shared-kernel\shared-kernel.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\9.0.8\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

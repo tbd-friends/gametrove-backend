@@ -1,4 +1,4 @@
-﻿using games_application.Dtos;
+﻿using games_application.SharedDtos;
 
 namespace games_application.Query.Games.Models;
 

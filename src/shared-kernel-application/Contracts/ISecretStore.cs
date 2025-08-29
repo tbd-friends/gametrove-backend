@@ -2,8 +2,8 @@
 
 public interface ISecretStore
 {
-    Task<string> GetSecretAsync(string key);
-    Task SetSecretAsync(string key, string value);
-    Task RemoveSecretAsync(string key);
-    Task<bool> ExistsAsync(string key);
+    Task<string> GetSecretAsync(string key, CancellationToken cancellationToken);
+    Task SetSecretAsync(string key, string value, CancellationToken cancellationToken);
+    Task RemoveSecretAsync(string key, CancellationToken cancellationToken);
+    Task<bool> ExistsAsync(string key, CancellationToken cancellationToken);
 }

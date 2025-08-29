@@ -1,6 +1,6 @@
 ﻿using Ardalis.Result;
-using games_application.Dtos;
 using games_application.Query.Publishers.Specifications;
+using games_application.SharedDtos;
 using Mediator;
 using shared_kernel;
 using shared_kernel.Contracts;

@@ -27,6 +27,7 @@
       <ProjectReference Include="..\..\configuration\aspire\aspire-service-defaults\aspire-service-defaults.csproj" />
       <ProjectReference Include="..\authentication\authentication.csproj" />
       <ProjectReference Include="..\games-application\games-application.csproj" />
+      <ProjectReference Include="..\games.infrastructure-pricecharting-api\games.infrastructure-pricecharting-api.csproj" />
       <ProjectReference Include="..\games.infrastructure\games.infrastructure.csproj" />
       <ProjectReference Include="..\shared-kernel-infrastructure\shared-kernel-infrastructure.csproj" />
     </ItemGroup>
