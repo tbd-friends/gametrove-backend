@@ -9,5 +9,11 @@ public class PriceChartingGameCopyAssociationConfiguration : IEntityTypeConfigur
     public void Configure(EntityTypeBuilder<PriceChartingGameCopyAssociation> builder)
     {
         builder.ToTable("PriceChartingGameCopyAssociations");
+
+        builder.HasMany(e => e.History)
+            .WithOne(e => e.Association)
+            .HasForeignKey(e => e.AssociationId)
+            .HasPrincipalKey(e => e.Id)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

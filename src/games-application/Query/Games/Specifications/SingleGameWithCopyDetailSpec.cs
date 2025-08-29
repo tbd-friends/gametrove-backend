@@ -33,6 +33,7 @@ public sealed class SingleGameWithCopyDetailSpec : Specification<Game, GameWithC
                     select new GameCopyDto
                     {
                         Identifier = cp.Identifier,
+                        IsPriceChartingLinked = pc != null,
                         Name = pc != null ? pc.Name : cp.Game.Name,
                         PurchasedDate = cp.PurchaseDate,
                         Cost = cp.Cost,
@@ -42,7 +43,7 @@ public sealed class SingleGameWithCopyDetailSpec : Specification<Game, GameWithC
                             cp.IsCompleteInBox ? pc.CompleteInBoxPrice :
                             cp.IsLoose ? pc.LoosePrice : 0
                             : null,
-                        Condition = cp.IsNew ? "New" : cp.IsCompleteInBox ? "Complete" : cp.IsLoose ? "Loose" : null,
+                        Condition = cp.IsNew ? "New" : cp.IsCompleteInBox ? "Complete" : cp.IsLoose ? "Loose" : "Unknown",
                         UpdatedDate = cp.UpdatedDate
                     }
             });

@@ -5,22 +5,6 @@ using games_infrastructure_pricecharting_api.Contracts;
 
 namespace games_infrastructure_pricecharting_api.Client;
 
-public class PriceChartingResponse<TResponse>
-    where TResponse : class
-{
-    public required string Status { get; set; }
-    public required IEnumerable<TResponse> Products { get; set; }
-}
-
-public class PriceChartingProduct
-{
-    public required string Id { get; set; }
-    public int CibPrice { get; set; }
-    public int LoosePrice { get; set; }
-    public int NewPrice { get; set; }
-    public required string ProductName { get; set; }
-}
-
 public class PriceChartingApiClient(
     HttpClient client)
     : IPriceChartingApiClient

@@ -30,6 +30,7 @@ public class Search(ISender sender) : Endpoint<Search.Request, Results<Ok<IEnume
         {
             PriceChartingId = g.Id,
             Name = g.Name,
+            ConsoleName = g.ConsoleName,
             CompleteInBoxPrice = g.CompleteInBox,
             LoosePrice = g.Loose,
             NewPrice = g.New
@@ -46,6 +47,7 @@ public class Search(ISender sender) : Endpoint<Search.Request, Results<Ok<IEnume
     {
         public int PriceChartingId { get; set; }
         public required string Name { get; set; }
+        public required string ConsoleName { get; set; }
         public decimal? CompleteInBoxPrice { get; set; }
         public decimal? LoosePrice { get; set; }
         public decimal? NewPrice { get; set; }

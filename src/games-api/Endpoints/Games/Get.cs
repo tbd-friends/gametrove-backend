@@ -55,6 +55,7 @@ public class Get(ISender sender)
             Copies = result.Value.Copies.Select(c => new GameCopyResponseModel
             {
                 Id = c.Identifier,
+                IsPricingLinked = c.IsPriceChartingLinked,
                 Description = c.Name,
                 Condition = c.Condition,
                 Cost = c.Cost,

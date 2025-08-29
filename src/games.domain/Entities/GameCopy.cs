@@ -9,7 +9,7 @@ public class GameCopy
     public int Condition { get; set; }
     public string? Upc { get; set; }
     public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
-    public Guid Identifier { get; set; }
+    public Guid Identifier { get; set; } = Guid.NewGuid();
 
     public bool IsNew => (Condition & 256) == 256;
 
@@ -19,4 +19,9 @@ public class GameCopy
 
     public virtual Game Game { get; set; } = null!;
     public virtual PriceChartingGameCopyAssociation? PriceChartingAssociation { get; set; }
+
+    public void AssociateWithPriceCharting(PriceChartingGameCopyAssociation association)
+    {
+        PriceChartingAssociation = association;
+    }
 }

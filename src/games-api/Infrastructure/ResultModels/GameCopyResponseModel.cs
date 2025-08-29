@@ -2,6 +2,7 @@
 
 public sealed class GameCopyResponseModel : ResponseModelBase
 {
+    public bool IsPricingLinked { get; set; }
     public decimal? Cost { get; set; }
     public DateTime? PurchasedDate { get; set; }
     public DateTime UpdatedDate { get; set; }

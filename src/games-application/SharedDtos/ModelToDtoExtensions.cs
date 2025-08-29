@@ -11,6 +11,7 @@ public static class ModelToDtoExtensions
     public static PricingDto AsDto(this Product product)
     {
         return new PricingDto(product.Id, 
+            product.ConsoleName,
             product.Name, 
             product.CompleteInBoxPrice, 
             product.LoosePrice,

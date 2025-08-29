@@ -22,6 +22,7 @@ public static class Helpers
         return new Product
         {
             Id = int.Parse(product.Id),
+            ConsoleName = product.ConsoleName,
             Name = product.ProductName,
             CompleteInBoxPrice = product.CibPrice.ToDollars(),
             LoosePrice = product.LoosePrice.ToDollars(),
