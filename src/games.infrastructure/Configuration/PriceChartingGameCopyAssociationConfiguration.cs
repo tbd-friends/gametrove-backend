@@ -13,7 +13,6 @@ public class PriceChartingGameCopyAssociationConfiguration : IEntityTypeConfigur
         builder.HasMany(e => e.History)
             .WithOne(e => e.Association)
             .HasForeignKey(e => e.AssociationId)
-            .HasPrincipalKey(e => e.Id)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasPrincipalKey(e => e.Id);
     }
 }
