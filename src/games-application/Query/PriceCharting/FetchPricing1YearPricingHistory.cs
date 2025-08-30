@@ -11,39 +11,23 @@ public static class FetchPricing1YearPricingHistory
 {
     public record Query(Guid Identifier) : IQuery<Result<IEnumerable<PriceChartingHistoryDto>>>;
 
-    public class Handler(IRepository<GameCopy> gameCopies)
+    public class Handler(IRepository<PriceChartingGameCopyAssociation> associations)
         : IQueryHandler<Query, Result<IEnumerable<PriceChartingHistoryDto>>>
     {
         private readonly DateTime _earliest = DateTime.UtcNow.AddYears(-1);
+
         public async ValueTask<Result<IEnumerable<PriceChartingHistoryDto>>> Handle(Query query,
             CancellationToken cancellationToken)
         {
-            var copies = await gameCopies.ListAsync(
-                new GameCopyWithAssociationsNoTrackingSpec(query.Identifier),
+            var results = await associations.ListAsync(
+                new HistorySinceForGameNoTrackingSpec(query.Identifier, _earliest),
                 cancellationToken);
 
-            var byPriceChartingId = from x in copies.GroupBy(c => c.PriceChartingAssociation?.PriceChartingId)
-                let association = x.First().PriceChartingAssociation
-                where association != null && x.Key.HasValue
-                select new PriceChartingHistoryDto
-                {
-                    PriceChartingId = (int)x.Key,
-                    Name = association.Name,
-                    LastUpdated = association.LastUpdated,
-                    History = (from h in association.History
-                            where h.ImportDate >= _earliest
-                            select new PricingHistoryDto(
-                                h.Id,
-                                h.ImportDate,
-                                h.ConsoleName,
-                                h.Name,
-                                h.CompleteInBoxPrice,
-                                h.LoosePrice,
-                                h.NewPrice))
-                        .AsEnumerable()
-                };
+            var uniqueCopies = results
+                .DistinctBy(f => f.PriceChartingId)
+                .AsEnumerable();
 
-            return Result.Success(byPriceChartingId);
+            return Result.Success(uniqueCopies);
         }
     }
 }
