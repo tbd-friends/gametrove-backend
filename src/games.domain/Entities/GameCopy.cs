@@ -18,10 +18,11 @@ public class GameCopy
     public bool IsLoose => (Condition & 128) == 128 && (Condition & 32) == 0;
 
     public virtual Game Game { get; set; } = null!;
-    public virtual PriceChartingGameCopyAssociation? PriceChartingAssociation { get; set; }
 
-    public void AssociateWithPriceCharting(PriceChartingGameCopyAssociation association)
+    public virtual GameCopyPricing Price { get; set; } = null!;
+
+    public void AssociateWithPriceCharting(PriceChartingSnapshot priceChartingSnapshot)
     {
-        PriceChartingAssociation = association;
+        Price = new GameCopyPricing { GameCopyId = Id, Pricing = priceChartingSnapshot };
     }
 }

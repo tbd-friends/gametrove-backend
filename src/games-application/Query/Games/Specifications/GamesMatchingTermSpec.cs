@@ -8,7 +8,9 @@ public class GamesMatchingTermSpec : Specification<Game>
     public GamesMatchingTermSpec(string? searchTerm)
     {
         Query
-            .Where(g => searchTerm == null || g.Name.Contains(searchTerm))
+            .Include(g => g.Copies)
+            .Where(g => searchTerm == null || g.Name.Contains(searchTerm) ||
+                        g.Copies.Any(c => c.Upc != null && c.Upc.Contains(searchTerm)))
             .Include(g => g.Platform)
             .Include(g => g.Publisher)
             .OrderBy(g => g.Name);

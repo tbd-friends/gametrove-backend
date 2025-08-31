@@ -48,4 +48,16 @@ public class PriceChartingApiClient(
 
         return response is not null ? Result.Success(response.Products) : Result.Invalid();
     }
+
+    public async Task<Stream> DownloadCurrentPricingFile(string apiKey, CancellationToken cancellationToken = default)
+    {
+        var request = await client.GetAsync($"price-guide/download-custom?t={apiKey}", cancellationToken);
+
+        if (!request.IsSuccessStatusCode)
+        {
+            return Stream.Null;
+        }
+
+        return await request.Content.ReadAsStreamAsync(cancellationToken);
+    }
 }

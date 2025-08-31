@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\games-application\games-application.csproj" />
+      <ProjectReference Include="..\shared-kernel-infrastructure\shared-kernel-infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

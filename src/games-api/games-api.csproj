@@ -36,5 +36,25 @@
       <Folder Include="Infrastructure\Database\Models\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Pricing\**" />
+      <Compile Remove="Secrets\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Pricing\**" />
+      <EmbeddedResource Remove="Secrets\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Pricing\**" />
+      <Content Remove="Secrets\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Pricing\**" />
+      <None Remove="Secrets\**" />
+    </ItemGroup>
+
 
 </Project>

@@ -32,9 +32,7 @@ public static class AssociatePricingWithCopy
 
             ArgumentNullException.ThrowIfNull(copy);
 
-            copy.AssociateWithPriceCharting(PriceChartingGameCopyAssociation.Create(
-                copy.Id,
-                command.PriceChartingId,
+            copy.AssociateWithPriceCharting(PriceChartingSnapshot.Create(command.PriceChartingId,
                 product.Name,
                 product.ConsoleName,
                 product.CompleteInBoxPrice,

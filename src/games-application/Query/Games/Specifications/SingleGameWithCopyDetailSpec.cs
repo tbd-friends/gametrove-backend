@@ -13,7 +13,8 @@ public sealed class SingleGameWithCopyDetailSpec : Specification<Game, GameWithC
         Query
             .Where(g => g.Identifier == identifier)
             .Include(g => g.Copies)
-            .ThenInclude(c => c.PriceChartingAssociation)
+            .ThenInclude(c => c.Price)
+            .ThenInclude(p => p.Pricing)
             .Include(g => g.Mapping)
             .Include(g => g.Publisher)
             .Include(g => g.Platform)
@@ -29,7 +30,7 @@ public sealed class SingleGameWithCopyDetailSpec : Specification<Game, GameWithC
                 Publisher = g.Publisher != null ? g.Publisher.AsDto() : null,
                 CopyCount = g.Copies.Count,
                 Copies = from cp in g.Copies
-                    let pc = cp.PriceChartingAssociation
+                    let pc = cp.Price.Pricing
                     select new GameCopyDto
                     {
                         Identifier = cp.Identifier,
@@ -43,7 +44,9 @@ public sealed class SingleGameWithCopyDetailSpec : Specification<Game, GameWithC
                             cp.IsCompleteInBox ? pc.CompleteInBoxPrice :
                             cp.IsLoose ? pc.LoosePrice : 0
                             : null,
-                        Condition = cp.IsNew ? "New" : cp.IsCompleteInBox ? "Complete" : cp.IsLoose ? "Loose" : "Unknown",
+                        Condition = cp.IsNew ? "New" :
+                            cp.IsCompleteInBox ? "Complete" :
+                            cp.IsLoose ? "Loose" : "Unknown",
                         UpdatedDate = cp.UpdatedDate
                     }
             });

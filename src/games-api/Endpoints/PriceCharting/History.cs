@@ -19,10 +19,11 @@ public class History(ISender sender) : Endpoint<History.Request, Results<Ok<IEnu
             g.Description = "Will fetch the last year of price charting history for the associated types";
         });
     }
+
     public override async Task<Results<Ok<IEnumerable<Result>>, NotFound>> ExecuteAsync(Request req,
         CancellationToken ct)
     {
-        var results = await sender.Send(new FetchPricing1YearPricingHistory.Query(req.Identifier), ct);
+        var results = await sender.Send(new FetchingGameStatisticsWithHistory.Query(req.Identifier), ct);
 
         return results.IsSuccess
             ? TypedResults.Ok(
@@ -41,7 +42,11 @@ public class History(ISender sender) : Endpoint<History.Request, Results<Ok<IEnu
         public int PriceChartingId { get; set; }
         public required string Name { get; set; }
         public DateTime LastUpdated { get; set; }
+        public decimal? CompleteInBox { get; set; }
+        public decimal? Loose { get; set; }
+        public decimal? New { get; set; }
 
+        public StatisticsResult Statistics { get; set; } = null!;
         public IEnumerable<HistoryResult> History { get; set; } = [];
 
         public class HistoryResult
@@ -63,6 +68,30 @@ public class History(ISender sender) : Endpoint<History.Request, Results<Ok<IEnu
             }
         }
 
+        public class StatisticsResult
+        {
+            public decimal CompleteInBoxPercentageChange { get; set; }
+            public decimal CompleteInBoxPercentageChange12Months { get; set; }
+            public decimal LoosePercentageChange { get; set; }
+            public decimal LoosePercentageChange12Months { get; set; }
+            public decimal NewPercentageChange { get; set; }
+            public decimal NewPercentageChange12Months { get; set; }
+
+            public static StatisticsResult AsStatistics(PricingStatisticDto dto)
+            {
+                return new StatisticsResult
+                {
+                    CompleteInBoxPercentageChange = dto.CompleteInBoxPercentageChange,
+                    CompleteInBoxPercentageChange12Months =
+                        dto.CompleteInBoxPercentageChange12Months,
+                    NewPercentageChange = dto.NewPercentageChange,
+                    NewPercentageChange12Months = dto.NewPercentageChange12Months,
+                    LoosePercentageChange = dto.LoosePercentageChange,
+                    LoosePercentageChange12Months = dto.LoosePercentageChange12Months
+                };
+            }
+        }
+
         public static Result ToDto(PriceChartingHistoryDto dto)
         {
             return new Result
@@ -70,6 +99,10 @@ public class History(ISender sender) : Endpoint<History.Request, Results<Ok<IEnu
                 PriceChartingId = dto.PriceChartingId,
                 Name = dto.Name,
                 LastUpdated = dto.LastUpdated,
+                CompleteInBox = dto.CompleteInBox,
+                Loose = dto.Loose,
+                New = dto.New,
+                Statistics = StatisticsResult.AsStatistics(dto.Statistics),
                 History = dto.History.Select(HistoryResult.AsHistoryResult)
             };
         }

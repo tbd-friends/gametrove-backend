@@ -30,4 +30,9 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Configuration\PriceChartingGameCopyAssociationConfiguration.cs" />
+      <Compile Remove="Configuration\PriceChartingHistoryConfiguration.cs" />
+    </ItemGroup>
+
 </Project>

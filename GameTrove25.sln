@@ -7,6 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{837D
 		scripts\security-scan.ps1 = scripts\security-scan.ps1
 		scripts\View.sql = scripts\View.sql
 		scripts\002_Profiles.sql = scripts\002_Profiles.sql
+		scripts\003_migrate_pricing.sql = scripts\003_migrate_pricing.sql
+		scripts\004_igdb_mappings.sql = scripts\004_igdb_mappings.sql
+		scripts\005_pricing_statistics.sql = scripts\005_pricing_statistics.sql
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aspire-app-host", "configuration\aspire\aspire-app-host\aspire-app-host.csproj", "{78E9B93A-1701-4823-881C-0C59BE2F3565}"

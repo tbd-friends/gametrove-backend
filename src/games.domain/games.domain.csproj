@@ -11,9 +11,12 @@
       <Compile Update="Entities\Game.Behaviors.cs">
         <DependentUpon>Game.cs</DependentUpon>
       </Compile>
-      <Compile Update="Entities\PriceChartingGameCopyAssociation.Behaviors.cs">
-        <DependentUpon>PriceChartingGameCopyAssociation.cs</DependentUpon>
+      <Compile Update="Entities\PriceChartingSnapshot.Behaviors.cs">
+        <DependentUpon>PriceChartingSnapshot.cs</DependentUpon>
       </Compile>
+      <Compile Remove="Entities\PriceChartingGameCopyAssociation.cs" />
+      <Compile Remove="Entities\PriceChartingGameCopyAssociation.Behaviors.cs" />
+      <Compile Remove="Entities\PriceChartingHistory.cs" />
     </ItemGroup>
 
 </Project>

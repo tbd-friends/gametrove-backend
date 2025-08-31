@@ -10,7 +10,9 @@ public class PagedGamesWithDetailSpec : Specification<Game, GameDto>
     public PagedGamesWithDetailSpec(string? searchTerm, int start, int limit)
     {
         Query
-            .Where(g => searchTerm == null || g.Name.Contains(searchTerm))
+            .Include(g => g.Copies)
+            .Where(g => searchTerm == null || g.Name.Contains(searchTerm) ||
+                        g.Copies.Any(c => c.Upc != null && c.Upc.Contains(searchTerm)))
             .OrderBy(g => g.Name)
             .Include(g => g.Mapping)
             .Include(g => g.Platform)
