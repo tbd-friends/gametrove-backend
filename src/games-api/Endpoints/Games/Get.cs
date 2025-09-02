@@ -38,6 +38,11 @@ public class Get(ISender sender)
             Id = result.Value.Identifier,
             IgdbGameId = result.Value.IgdbGameId,
             Description = result.Value.Name,
+            HasReview = result.Value.HasReview,
+            Review = result.Value.Review != null
+                ? new GameDetailResponseModel.ReviewResponseModel(result.Value.Review.OverallRating,
+                    result.Value.Review.Title)
+                : null,
             Platform = new PlatformResponseModel
             {
                 Id = result.Value.Platform.Identifier,

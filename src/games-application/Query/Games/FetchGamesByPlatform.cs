@@ -42,3 +42,7 @@ public static class FetchGamesByConsole
         }
     }
 }
+
+public class PlatformWithStatsDto
+{
+}

@@ -25,5 +25,11 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
             .HasForeignKey<IgdbGameMapping>(m => m.GameId)
             .HasPrincipalKey<Game>(g => g.Id)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(g => g.Review)
+            .WithOne(r => r.Game)
+            .HasForeignKey<Review>(r => r.GameId)
+            .HasPrincipalKey<Game>(g => g.Id)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

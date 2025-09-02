@@ -5,7 +5,7 @@ using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace games_application.Query.Games.Specifications;
 
-public class PagedGamesWithDetailSpec : Specification<Game, GameDto>
+public class PagedGamesWithDetailSpec : Specification<Game, GameListDto>
 {
     public PagedGamesWithDetailSpec(string? searchTerm, int start, int limit)
     {
@@ -18,14 +18,16 @@ public class PagedGamesWithDetailSpec : Specification<Game, GameDto>
             .Include(g => g.Platform)
             .ThenInclude(p => p.Mapping)
             .Include(g => g.Publisher)
+            .Include(g => g.Review)
             .Skip((start - 1) * limit)
             .Take(limit)
             .AsNoTracking()
-            .Select(g => new GameDto
+            .Select(g => new GameListDto
             {
                 Id = g.Id,
                 IgdbGameId = g.Mapping != null ? g.Mapping.IgdbGameId : null,
                 Name = g.Name,
+                OverallRating = g.Review != null ? g.Review.OverallRating : null,
                 Identifier = g.Identifier,
                 Platform = g.Platform.AsDto(),
                 Publisher = g.Publisher != null ? g.Publisher.AsDto() : null,

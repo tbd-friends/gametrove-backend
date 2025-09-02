@@ -8,16 +8,16 @@ using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace games_application.Query.Games;
 
-public class FetchAllGames
+public static class FetchAllGames
 {
     public record Query(
         int Start,
         int Limit,
-        string? Search) : IQuery<Result<PagedResultSetDto<GameDto>>>;
+        string? Search) : IQuery<Result<PagedResultSetDto<GameListDto>>>;
 
-    public class Handler(IRepository<Game> repository) : IQueryHandler<Query, Result<PagedResultSetDto<GameDto>>>
+    public class Handler(IRepository<Game> repository) : IQueryHandler<Query, Result<PagedResultSetDto<GameListDto>>>
     {
-        public async ValueTask<Result<PagedResultSetDto<GameDto>>> Handle(Query query,
+        public async ValueTask<Result<PagedResultSetDto<GameListDto>>> Handle(Query query,
             CancellationToken cancellationToken)
         {
             var matchingGamesCount =
@@ -32,7 +32,7 @@ public class FetchAllGames
             var games = await repository.ListAsync(
                 new PagedGamesWithDetailSpec(query.Search, query.Start, query.Limit), cancellationToken);
 
-            return Result.Success(new PagedResultSetDto<GameDto>
+            return Result.Success(new PagedResultSetDto<GameListDto>
             {
                 Data = games,
                 Limit = query.Limit,

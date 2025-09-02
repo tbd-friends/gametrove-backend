@@ -41,7 +41,7 @@ public class List(ISender sender)
         return TypedResults.Ok(BuildResultFromQuery(result));
     }
 
-    private static ResultSet<GameListResponseModel> BuildResultFromQuery(Result<PagedResultSetDto<GameDto>> result)
+    private static ResultSet<GameListResponseModel> BuildResultFromQuery(Result<PagedResultSetDto<GameListDto>> result)
     {
         return result.IsSuccess
             ? new ResultSet<GameListResponseModel>
@@ -52,6 +52,7 @@ public class List(ISender sender)
                         Id = g.Identifier,
                         IgdbGameId = g.IgdbGameId,
                         Description = g.Name,
+                        OverallRating = g.OverallRating,
                         Platform = WithPlatform(g),
                         Publisher = WithPublisher(g),
                         CopyCount = g.CopyCount

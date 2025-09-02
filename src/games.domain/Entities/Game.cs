@@ -22,4 +22,5 @@ public partial class Game
     public virtual ICollection<GameCopy> Copies { get; set; } = new List<GameCopy>();
 
     public virtual IgdbGameMapping? Mapping { get; set; }
+    public virtual Review? Review { get; set; }
 }

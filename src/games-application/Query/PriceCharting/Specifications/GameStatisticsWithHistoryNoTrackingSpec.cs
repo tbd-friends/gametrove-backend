@@ -24,16 +24,16 @@ public sealed class GameStatisticsWithHistoryNoTrackingSpec
                 New = link.Pricing.NewPrice,
                 Statistics = new PricingStatisticDto
                 {
-                    CompleteInBoxPercentageChange =  link.Pricing.Statistics.CompleteInBoxPercentageChange,
+                    CompleteInBoxPercentageChange = link.Pricing.Statistics.CompleteInBoxPercentageChange,
                     CompleteInBoxPercentageChange12Months =
                         link.Pricing.Statistics.CompleteInBoxPercentageChange12Months,
-                    NewPercentageChange =  link.Pricing.Statistics.NewPercentageChange,
-                    NewPercentageChange12Months =  link.Pricing.Statistics.NewPercentageChange12Months,
-                    LoosePercentageChange =  link.Pricing.Statistics.LoosePercentageChange,
-                    LoosePercentageChange12Months =  link.Pricing.Statistics.LoosePercentageChange12Months,
+                    NewPercentageChange = link.Pricing.Statistics.NewPercentageChange,
+                    NewPercentageChange12Months = link.Pricing.Statistics.NewPercentageChange12Months,
+                    LoosePercentageChange = link.Pricing.Statistics.LoosePercentageChange,
+                    LoosePercentageChange12Months = link.Pricing.Statistics.LoosePercentageChange12Months,
                 },
-                History =
-                    (from h in link.Pricing.History
+                History = link.Pricing.History.Count > 0
+                    ? (from h in link.Pricing.History
                         where h.ImportDate >= since
                         select new PricingHistoryDto(
                             h.Id,
@@ -44,6 +44,7 @@ public sealed class GameStatisticsWithHistoryNoTrackingSpec
                             h.LoosePrice,
                             h.NewPrice))
                     .AsEnumerable()
+                    : Enumerable.Empty<PricingHistoryDto>()
             });
     }
 }

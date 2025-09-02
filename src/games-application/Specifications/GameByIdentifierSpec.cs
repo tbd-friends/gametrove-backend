@@ -7,6 +7,8 @@ public class GameByIdentifierSpec : Specification<Game>, ISingleResultSpecificat
 {
     public GameByIdentifierSpec(Guid identifier)
     {
-        Query.Where(r => r.Identifier == identifier);
+        Query
+            .Include(g => g.Mapping)
+            .Where(r => r.Identifier == identifier);
     }
 }

@@ -19,6 +19,7 @@ public sealed class SingleGameWithCopyDetailSpec : Specification<Game, GameWithC
             .Include(g => g.Publisher)
             .Include(g => g.Platform)
             .ThenInclude(p => p.Mapping)
+            .Include(p => p.Review)
             .AsNoTracking()
             .Select(g => new GameWithCopyDetailDto
             {
@@ -29,6 +30,10 @@ public sealed class SingleGameWithCopyDetailSpec : Specification<Game, GameWithC
                 Platform = g.Platform.AsDto(),
                 Publisher = g.Publisher != null ? g.Publisher.AsDto() : null,
                 CopyCount = g.Copies.Count,
+                HasReview = g.Review != null,
+                Review = g.Review != null
+                    ? new GameWithCopyDetailDto.ReviewDto(g.Review.OverallRating, g.Review.Title)
+                    : null,
                 Copies = from cp in g.Copies
                     let pc = cp.Price.Pricing
                     select new GameCopyDto
