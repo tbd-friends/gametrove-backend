@@ -1,15 +1,18 @@
 using Authentication.Extensions;
 using FastEndpoints;
+using igdb_api.Infrastructure;
 using igdb_application;
 using igdb_infrastructure_api;
 using igdb_infrastructure;
+using shared_kernel_infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults()
     .AddApplication()
     .AddInfrastructure()
-    .AddInfrastructureApi();
+    .AddInfrastructureApi()
+    .AddChannelEventBus();
 
 builder.Services.AddFastEndpoints();
 
@@ -20,6 +23,8 @@ builder.Services.AddMemoryCache();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AuthPolicy", policy =>
         policy.RequireAuthenticatedUser());
+
+builder.Services.AddHostedService<DomainEventService>();
 
 builder.Services.AddAuth0Authentication(builder.Configuration);
 

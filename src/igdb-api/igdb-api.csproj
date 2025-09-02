@@ -10,39 +10,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FastEndpoints" />
-        <PackageReference Include="FastEndpoints.OpenTelemetry" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" />
-        <PackageReference Include="Swashbuckle.AspNetCore" />
+        <PackageReference Include="FastEndpoints"/>
+        <PackageReference Include="FastEndpoints.OpenTelemetry"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting"/>
+        <PackageReference Include="Swashbuckle.AspNetCore"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\configuration\aspire\aspire-service-defaults\aspire-service-defaults.csproj" />
-      <ProjectReference Include="..\authentication\authentication.csproj" />
-      <ProjectReference Include="..\igdb-application\igdb-application.csproj" />
-      <ProjectReference Include="..\igdb-infrastructure-api\igdb-infrastructure-api.csproj" />
-      <ProjectReference Include="..\igdb-infrastructure\igdb-infrastructure.csproj" />
+        <ProjectReference Include="..\..\configuration\aspire\aspire-service-defaults\aspire-service-defaults.csproj"/>
+        <ProjectReference Include="..\authentication\authentication.csproj"/>
+        <ProjectReference Include="..\igdb-application\igdb-application.csproj"/>
+        <ProjectReference Include="..\igdb-infrastructure-api\igdb-infrastructure-api.csproj"/>
+        <ProjectReference Include="..\igdb-infrastructure\igdb-infrastructure.csproj"/>
+        <ProjectReference Include="..\shared-kernel-infrastructure\shared-kernel-infrastructure.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="appsettings.Development.json" />
-      <None Include="appsettings.Development.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <Content Remove="Infrastructure\**" />
-      <None Remove="Infrastructure\**" />
+        <Content Remove="appsettings.Development.json"/>
+        <None Include="appsettings.Development.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Infrastructure\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Infrastructure\**" />
-    </ItemGroup>
-
-
-
 
 </Project>

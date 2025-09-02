@@ -1,7 +1,7 @@
 ﻿using Ardalis.Result;
+using igdb_application.Command.Caching.Specifications;
 using igdb_domain.Entities;
 using Mediator;
-using shared_kernel;
 using shared_kernel.Contracts;
 
 namespace igdb_application.Command.Caching;
@@ -14,6 +14,14 @@ public static class EnqueueCacheRequest
     {
         public async ValueTask<Result> Handle(Command command, CancellationToken cancellationToken)
         {
+            var exists = await cache.FirstOrDefaultAsync(new EntryAlreadyQueuedSpec(command.Id, command.EntityType),
+                cancellationToken);
+
+            if (exists is not null)
+            {
+                return Result.Conflict();
+            }
+            
             await cache.AddAsync(new CacheQueueEntry
             {
                 EntityId = command.Id, EntityType = command.EntityType, Entered = DateTime.UtcNow

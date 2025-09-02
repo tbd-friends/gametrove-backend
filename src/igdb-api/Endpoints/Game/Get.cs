@@ -31,6 +31,7 @@ public class Get(ISender sender)
         return TypedResults.Ok(new Result
         {
             Id = result.Id,
+            AgeRatings = result.AgeRatings,
             Cover = result.Cover is not null ? Result.CoverArt.FromCover(result.Cover) : null,
             Name = result.Name,
             Summary = result.Storyline ?? result.Summary,
@@ -49,6 +50,7 @@ public class Get(ISender sender)
     public class Result
     {
         public int Id { get; set; }
+        public IEnumerable<string> AgeRatings { get; set; } = [];
         public CoverArt? Cover { get; set; }
         public string Name { get; set; } = null!;
         public string Summary { get; set; } = null!;

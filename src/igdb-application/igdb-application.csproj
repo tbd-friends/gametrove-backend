@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\igdb-domain\igdb-domain.csproj" />
+      <ProjectReference Include="..\shared-kernel-infrastructure\shared-kernel-infrastructure.csproj" />
       <ProjectReference Include="..\shared-kernel\shared-kernel.csproj" />
     </ItemGroup>
 

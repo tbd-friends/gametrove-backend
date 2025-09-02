@@ -7,7 +7,7 @@ public class Game : IgdbEntityBase
 {
     public Cover? Cover { get; set; }
     public int FirstReleaseDate { get; set; }
-
+    public List<AgeRating> AgeRatings { get; set; } = [];
     public List<BasicEntityInfo> Genres { get; set; } = [];
     public List<BasicEntityInfo> Keywords { get; set; } = [];
     public string Name { get; set; } = null!;

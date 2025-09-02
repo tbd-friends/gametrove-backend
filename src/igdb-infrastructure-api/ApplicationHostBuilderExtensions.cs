@@ -1,5 +1,7 @@
 ﻿using igdb_application.Contracts;
 using igdb_infrastructure_api.Client;
+using igdb_infrastructure_api.Services;
+using igdb_infrastructure_api.Services.Fetchers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,6 +18,10 @@ public static class ApplicationHostBuilderExtensions
 
         builder.Services.AddScoped<IGameService, GameService>();
         builder.Services.AddScoped<IPlatformService, PlatformService>();
+
+        builder.Services.AddScoped<GameFetcher>();
+        
+        builder.Services.AddHostedService<CacheFetchBackgroundService>();
 
         return builder;
     }

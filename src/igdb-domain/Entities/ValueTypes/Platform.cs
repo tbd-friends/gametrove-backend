@@ -4,6 +4,6 @@ namespace igdb_domain.Entities.ValueTypes;
 
 public class Platform : BasicEntityInfo
 {
-    public string AlternativeName { get; set; } = null!;
+    public string? AlternativeName { get; set; }
     public int Generation { get; set; }
 }
