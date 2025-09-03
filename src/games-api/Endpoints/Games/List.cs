@@ -53,6 +53,7 @@ public class List(ISender sender)
                         IgdbGameId = g.IgdbGameId,
                         Description = g.Name,
                         OverallRating = g.OverallRating,
+                        Averages = WithAverages(g),
                         Platform = WithPlatform(g),
                         Publisher = WithPublisher(g),
                         CopyCount = g.CopyCount
@@ -66,6 +67,16 @@ public class List(ISender sender)
                 }
             }
             : new ResultSet<GameListResponseModel>() { Data = [] };
+    }
+
+    private static GameListResponseModel.AveragesResponse? WithAverages(GameListDto g)
+    {
+        return g.Averages != null
+            ? new GameListResponseModel.AveragesResponse(
+                g.Averages.CompleteDifference, 
+                g.Averages.LooseDifference,
+                g.Averages.NewDifference)
+            : null;
     }
 
     private static PlatformResponseModel WithPlatform(GameDto g)
@@ -88,6 +99,7 @@ public class List(ISender sender)
             }
             : null;
     }
+
 
     public sealed record Query
     {

@@ -21,7 +21,8 @@ public static class FetchGamesLikeThis
 
             ArgumentNullException.ThrowIfNull(game);
 
-            var search = await games.ListAsync(new FindGamesLikeSpec(game.SoundexName), cancellationToken);
+            var search = await games.ListAsync(new FindGamesLikeSpec(query.Identifier, game.SoundexName),
+                cancellationToken);
 
             if (!search.Any())
             {

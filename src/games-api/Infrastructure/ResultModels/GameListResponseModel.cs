@@ -6,6 +6,9 @@ public class GameListResponseModel : ResponseModelBase
     public PlatformResponseModel Platform { get; set; } = null!;
     public PublisherResponseModel? Publisher { get; set; }
     public short? OverallRating { get; set; }
+    public AveragesResponse? Averages { get; set; }
     public int CopyCount { get; set; }
     protected override string UrlBase { get; set; } = "games";
+
+    public record AveragesResponse(decimal CompleteInBoxDifference, decimal LooseDifference, decimal NewDifference);
 }

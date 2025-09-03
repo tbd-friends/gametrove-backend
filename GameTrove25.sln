@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{837D
 		scripts\008_reviews.sql = scripts\008_reviews.sql
 		scripts\009_fn_GetSoundexName.sql = scripts\009_fn_GetSoundexName.sql
 		scripts\010_view_searchablegames.sql = scripts\010_view_searchablegames.sql
+		scripts\011_game_average_differences.sql = scripts\011_game_average_differences.sql
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aspire-app-host", "configuration\aspire\aspire-app-host\aspire-app-host.csproj", "{78E9B93A-1701-4823-881C-0C59BE2F3565}"

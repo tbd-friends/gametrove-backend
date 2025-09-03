@@ -31,5 +31,11 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
             .HasForeignKey<Review>(r => r.GameId)
             .HasPrincipalKey<Game>(g => g.Id)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(g => g.Averages)
+            .WithOne(a => a.Game)
+            .HasForeignKey<PriceChartingGameAverage>(a => a.Id)
+            .HasPrincipalKey<Game>(g => g.Id)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

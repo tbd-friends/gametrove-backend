@@ -16,6 +16,9 @@ IF OBJECT_ID('dbo.PriceChartingSnapshot', 'U') IS NOT NULL
         RETURN;
     END;
 
+use gametracking
+go
+
 create table dbo.PriceChartingSnapshot
 (
     Id                 int identity
@@ -35,6 +38,9 @@ create table dbo.PriceChartingSnapshot
 )
 go
 
+use gametracking
+go
+
 create table dbo.PriceChartingSnapshotHistory
 (
     Id                 int identity
@@ -49,6 +55,11 @@ create table dbo.PriceChartingSnapshotHistory
     ConsoleName        nvarchar(100)
 )
 go
+
+create index IX_PriceChartingSnapshotHistory_Correlated
+    on dbo.PriceChartingSnapshotHistory (PriceChartingId asc, ImportDate desc) include (CompleteInBoxPrice, LoosePrice, NewPrice)
+go
+
 
 create table dbo.GameCopyPricing
 (
@@ -70,7 +81,13 @@ go
 
 insert into dbo.PriceChartingSnapshot
 (PriceChartingId, Name, CompleteInBoxPrice, LoosePrice, NewPrice, ConsoleName, LastUpdated)
-select pcga.PriceChartingId, pcga.Name, pcga.CompleteInBoxPrice, pcga.LoosePrice, pcga.NewPrice, pcga.ConsoleName, pcga.LastUpdated
+select pcga.PriceChartingId,
+       pcga.Name,
+       pcga.CompleteInBoxPrice,
+       pcga.LoosePrice,
+       pcga.NewPrice,
+       pcga.ConsoleName,
+       pcga.LastUpdated
 from PriceChartingGameCopyAssociations pcga
 where pcga.Id = (select top 1 pcga2.Id
                  from PriceChartingGameCopyAssociations pcga2
@@ -99,7 +116,7 @@ FROM PriceChartingGameCopyAssociations
 /*
   Drop unnecessary tables
  */
- 
+
 DROP TABLE dbo.PriceChartingGameCopyAssociations
 GO
 

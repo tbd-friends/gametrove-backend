@@ -19,6 +19,7 @@ public class PagedGamesWithDetailSpec : Specification<Game, GameListDto>
             .ThenInclude(p => p.Mapping)
             .Include(g => g.Publisher)
             .Include(g => g.Review)
+            .Include(g => g.Averages)
             .Skip((start - 1) * limit)
             .Take(limit)
             .AsNoTracking()
@@ -28,6 +29,12 @@ public class PagedGamesWithDetailSpec : Specification<Game, GameListDto>
                 IgdbGameId = g.Mapping != null ? g.Mapping.IgdbGameId : null,
                 Name = g.Name,
                 OverallRating = g.Review != null ? g.Review.OverallRating : null,
+                Averages = g.Averages != null
+                    ? new GameListDto.AveragesDto(
+                        g.Averages.AverageCompleteInBoxDifference,
+                        g.Averages.AverageLooseDifference,
+                        g.Averages.AverageNewDifference)
+                    : null,
                 Identifier = g.Identifier,
                 Platform = g.Platform.AsDto(),
                 Publisher = g.Publisher != null ? g.Publisher.AsDto() : null,
