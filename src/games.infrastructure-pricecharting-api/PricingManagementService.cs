@@ -10,22 +10,19 @@ namespace games_infrastructure_pricecharting_api;
 public class PricingManagementService(
     PriceChartingApiClient client,
     IOptions<PriceChartingOptions> options,
-    ISecretStore secrets,
-    ICurrentUserService user)
+    ISecretStore secrets)
     : IPricingManagementService
 {
-    private Lazy<string> Key => new(() =>
-        Helpers.PriceChartingApiKey(user.UserId ?? throw new ArgumentNullException($"User Invalid - {user}")));
-
-    public async ValueTask BeginPriceChartingUpdate(CancellationToken cancellationToken = default)
+    public async ValueTask BeginPriceChartingUpdate(string userIdentifier,
+        CancellationToken cancellationToken = default)
     {
-        var apiKey = await secrets.GetSecretAsync(Key.Value, cancellationToken);
+        var apiKey = await secrets.GetSecretAsync(Helpers.PriceChartingApiKey(userIdentifier), cancellationToken);
 
         await using var stream = await client.DownloadCurrentPricingFile(apiKey, cancellationToken);
 
         var timestamp = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
         var finalFile = Path.Combine(options.Value.PricingFileDirectory, $"{timestamp}_pricecharting.csv");
-        var tempFile = Path.Combine(options.Value.PricingFileDirectory, $"{timestamp}_pricecharting.tmp");
+        var tempFile = Path.GetRandomFileName();
 
         await using (var file = new FileStream(
                          tempFile,

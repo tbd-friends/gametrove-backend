@@ -2,5 +2,5 @@
 
 public interface IPricingManagementService
 {
-    ValueTask BeginPriceChartingUpdate(CancellationToken cancellationToken = default);
+    ValueTask BeginPriceChartingUpdate(string userIdentifier, CancellationToken cancellationToken = default);
 }

@@ -3,10 +3,12 @@ using System.Diagnostics;
 using System.Globalization;
 using games_infrastructure_pricecharting_api.PricingUpdate.Parsers;
 using games_infrastructure_pricecharting_api.WorkerServices.Events;
+using games_infrastructure_pricecharting_api.WorkerServices.Specifications;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using shared_kernel_infrastructure.Contracts;
 using shared_kernel_infrastructure.EventBus;
 using shared_kernel.Contracts;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
@@ -55,22 +57,31 @@ public class PricingFileMonitorService(
                 return;
             }
 
+            await WaitUntilFileIsAvailableAsync(e);
+
             await ProcessPricingFile(e, scope);
         });
     }
 
-    private async Task ProcessPricingFile(FileSystemEventArgs e, AsyncServiceScope scope)
+    private async Task ProcessPricingFile(
+        FileSystemEventArgs e,
+        AsyncServiceScope scope)
     {
-        Stopwatch sw = Stopwatch.StartNew();
+        var sw = Stopwatch.StartNew();
+
+        var info = new FileInfo(e.FullPath);
 
         var repository = scope.ServiceProvider.GetRequiredService<IRepository<PriceChartingSnapshot>>();
 
-        var mappings = await repository.ListAsync(CancellationToken.None);
+        var mappings = await repository.ListAsync(new MappingsUpdatedBeforeDateSpec(info.LastWriteTimeUtc),
+            CancellationToken.None);
 
-        var pricingEvents = await FetchEventsToProcess(e, mappings);
+        var pricingEvents = await FetchEventsToProcess(e, info, mappings);
 
         foreach (var pricingEvent in pricingEvents)
         {
+            logger.LogInformation("Pricing Event to Publish {PriceChartingId}", pricingEvent.PriceChartingId);
+
             await _eventBus.PublishAsync(pricingEvent);
         }
 
@@ -79,11 +90,11 @@ public class PricingFileMonitorService(
         logger.LogInformation("Price File Processing took {ElapsedMilliseconds}ms", sw.ElapsedMilliseconds);
     }
 
-    private static async Task<IEnumerable<PricingUpdateEvent>> FetchEventsToProcess(FileSystemEventArgs e,
+    private static async Task<IEnumerable<PricingUpdateEvent>> FetchEventsToProcess(
+        FileSystemEventArgs e,
+        FileInfo fileInfo,
         List<PriceChartingSnapshot> mappings)
     {
-        var info = new FileInfo(e.FullPath);
-
         await using var stream = File.OpenRead(e.FullPath);
 
         var pricingEvents = from x in new CsvParser<PriceRecord>(stream)
@@ -106,10 +117,32 @@ public class PricingFileMonitorService(
                 LoosePrice = loosePrice,
                 CompletePrice = completePrice,
                 NewPrice = newPrice,
-                UpdatedAt = info.LastWriteTimeUtc
+                UpdatedAt = fileInfo.LastWriteTimeUtc
             };
 
         return pricingEvents.ToList();
+    }
+
+    private static async Task WaitUntilFileIsAvailableAsync(FileSystemEventArgs e)
+    {
+        using CancellationTokenSource cts = new(TimeSpan.FromMinutes(5));
+
+        while (!cts.Token.IsCancellationRequested)
+        {
+            try
+            {
+                await using FileStream stream =
+                    new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.None);
+
+                Console.WriteLine($"File {e.Name} is ready.");
+
+                break;
+            }
+            catch (IOException)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
+            }
+        }
     }
 
     private sealed class PriceRecord

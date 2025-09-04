@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using shared_kernel_infrastructure.Contracts;
 using shared_kernel_infrastructure.EventBus;
 
 namespace shared_kernel_infrastructure.Extensions;

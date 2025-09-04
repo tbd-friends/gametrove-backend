@@ -2,8 +2,9 @@ using Authentication.Extensions;
 using FastEndpoints;
 using games_application;
 using games_infrastructure_pricecharting_api;
-using Microsoft.AspNetCore.Http.Timeouts;
+using Microsoft.Extensions.Http.Resilience;
 using shared_kernel_infrastructure.Extensions;
+using TbdDevelop.GameTrove.GameApi.Infrastructure;
 using TbdDevelop.GameTrove.Games.Infrastructure;
 
 var builder = WebApplication
@@ -18,13 +19,28 @@ builder.AddPriceChartingInfrastructure();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddFastEndpoints()
-    .AddRequestTimeouts(configure =>
+builder.Services.AddFastEndpoints();
+
+builder.Services.ConfigureHttpClientDefaults(http =>
+{
+    http.AddStandardResilienceHandler(options =>
     {
-        configure.Policies.Add("long-timeout", new RequestTimeoutPolicy { Timeout = TimeSpan.FromMinutes(2) });
+        var timeoutStrategy = new HttpTimeoutStrategyOptions
+        {
+            Timeout = TimeSpan.FromMinutes(5)
+        };
+
+        options.AttemptTimeout = timeoutStrategy;
+        options.TotalRequestTimeout = timeoutStrategy;
+        options.CircuitBreaker.SamplingDuration = TimeSpan.FromMinutes(10);
+
+        options.Retry.MaxRetryAttempts = 2;
     });
+});
 
 builder.Services.AddAuth0Authentication(builder.Configuration);
+
+builder.Services.AddHostedService<DomainEventService>();
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AuthPolicy", policy =>

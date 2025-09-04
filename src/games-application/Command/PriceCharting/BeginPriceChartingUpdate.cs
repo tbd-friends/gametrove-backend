@@ -5,7 +5,7 @@ namespace games_application.Command.PriceCharting;
 
 public static class BeginPriceChartingUpdate
 {
-    public record Command : ICommand;
+    public record Command(string UserIdentifier) : ICommand;
 
     public class Handler(
         IPricingManagementService management
@@ -13,7 +13,7 @@ public static class BeginPriceChartingUpdate
     {
         public async ValueTask<Unit> Handle(Command command, CancellationToken cancellationToken)
         {
-            await management.BeginPriceChartingUpdate(cancellationToken);
+            await management.BeginPriceChartingUpdate(command.UserIdentifier, cancellationToken);
 
             return Unit.Value;
         }

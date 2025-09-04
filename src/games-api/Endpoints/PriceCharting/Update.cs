@@ -1,10 +1,13 @@
 ﻿using FastEndpoints;
-using games_application.Command.PriceCharting;
-using Mediator;
+using games_application.Contracts;
+using TbdDevelop.GameTrove.Games.Domain.Events;
+using IEventBus = shared_kernel_infrastructure.Contracts.IEventBus;
 
 namespace TbdDevelop.GameTrove.GameApi.Endpoints.PriceCharting;
 
-public class Update(ISender sender) : EndpointWithoutRequest
+public class Update(
+    ICurrentUserService user,
+    IEventBus eventBus) : EndpointWithoutRequest
 {
     public override void Configure()
     {
@@ -19,6 +22,6 @@ public class Update(ISender sender) : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        await sender.Send(new BeginPriceChartingUpdate.Command(), ct);
+        await eventBus.PublishAsync(new PricingUpdateRequested(user.UserId!));
     }
 }

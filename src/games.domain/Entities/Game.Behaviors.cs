@@ -9,20 +9,22 @@ public partial class Game
         return game;
     }
 
-    public void AssociateWithIgdb(int igdbGameId)
+    public void AssociateWithIgdb(int igdbId)
     {
-        if (Mapping != null &&
-            Mapping.IgdbGameId != igdbGameId)
-        {
-            Mapping.IgdbGameId = igdbGameId;
-        }
-        else
+        if (Mapping is null)
         {
             Mapping = new IgdbGameMapping
             {
                 GameId = Id,
-                IgdbGameId = igdbGameId
+                IgdbGameId = igdbId
             };
+        }
+        else
+        {
+            if (Mapping.IgdbGameId != igdbId)
+            {
+                Mapping.IgdbGameId = igdbId;
+            }
         }
     }
 

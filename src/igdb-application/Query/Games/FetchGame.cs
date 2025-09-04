@@ -4,6 +4,7 @@ using igdb_application.Query.Games.Specifications;
 using igdb_domain.DomainEvents;
 using igdb_domain.Entities;
 using Mediator;
+using shared_kernel_infrastructure.Contracts;
 using shared_kernel_infrastructure.EventBus;
 using shared_kernel;
 using shared_kernel.Contracts;

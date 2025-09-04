@@ -2,13 +2,16 @@
 using games_infrastructure_pricecharting_api.WorkerServices.Events;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using shared_kernel_infrastructure.Contracts;
 using shared_kernel_infrastructure.EventBus;
 using shared_kernel.Contracts;
 using TbdDevelop.GameTrove.Games.Domain.Entities;
 
 namespace games_infrastructure_pricecharting_api.WorkerServices;
 
-public class PricingUpdateService(IServiceScopeFactory factory) : BackgroundService
+public class PricingUpdateService(IServiceScopeFactory factory, ILogger<PricingUpdateService> logger)
+    : BackgroundService
 {
     private IEventBus _eventBus;
     private IRepository<PriceChartingSnapshot> _repository = null!;
@@ -27,6 +30,8 @@ public class PricingUpdateService(IServiceScopeFactory factory) : BackgroundServ
 
     private async Task ProcessPricingEvent(PricingUpdateEvent pricingEvent, CancellationToken stoppingToken)
     {
+        logger.LogInformation("Pricing update event received {PriceChartingId}", pricingEvent.PriceChartingId);
+
         var existing =
             await _repository.FirstOrDefaultAsync(new SnapshotByPriceChartingIdSpec(pricingEvent.PriceChartingId),
                 stoppingToken);

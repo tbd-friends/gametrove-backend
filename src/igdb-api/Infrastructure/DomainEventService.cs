@@ -1,6 +1,7 @@
 ﻿using igdb_application.Command.Caching;
 using igdb_domain.DomainEvents;
 using Mediator;
+using shared_kernel_infrastructure.Contracts;
 using shared_kernel_infrastructure.EventBus;
 
 namespace igdb_api.Infrastructure;
